@@ -50,7 +50,8 @@ class LoginScreen extends StatelessWidget {
             hintText: hintTitle,
             hintStyle: TextStyle(
                 fontSize: 18,
-                color: Colors.white70,
+                fontWeight: FontWeight.w700,
+                color: Colors.black87,
                 fontStyle: FontStyle.italic),
           ),
           keyboardType: keyboardType,
@@ -72,8 +73,9 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Container(
+      resizeToAvoidBottomInset: true,
+      body: SingleChildScrollView(
+          child: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
             alignment: Alignment.topCenter,
@@ -87,7 +89,7 @@ class LoginScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Container(
-              height: 510,
+              height: MediaQuery.of(context).size.height,
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
@@ -100,7 +102,7 @@ class LoginScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    SizedBox(height: 45),
+                    SizedBox(height: 250),
                     userInput(
                         emailController, 'Email', TextInputType.emailAddress),
                     userInput(passwordController, 'Password',
@@ -230,7 +232,7 @@ class LoginScreen extends StatelessWidget {
             ),
           ],
         ),
-      ),
+      )),
     );
   }
 }
