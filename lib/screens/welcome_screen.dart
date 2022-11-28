@@ -67,7 +67,7 @@ class WelcomeScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Container(
-                      height: 80,
+                      height: 90,
                       width: double.infinity,
                       padding:
                           const EdgeInsets.only(top: 25, left: 24, right: 24),
@@ -79,8 +79,8 @@ class WelcomeScreen extends StatelessWidget {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0)),
                             backgroundColor: Colors.indigo.shade800),
-                        onPressed: () => Navigator.of(context)
-                            .pushNamed(LoginScreen.routeName),
+                        onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(builder: (ctx) => LoginScreen())),
                         child: Text(
                           'Log In',
                           style: TextStyle(
@@ -92,7 +92,7 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      height: 80,
+                      height: 90,
                       width: double.infinity,
                       padding:
                           const EdgeInsets.only(top: 25, left: 24, right: 24),
@@ -104,8 +104,9 @@ class WelcomeScreen extends StatelessWidget {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0)),
                             backgroundColor: Colors.indigo.shade800),
-                        onPressed: () => Navigator.of(context)
-                            .pushNamed(SignupScreen.routeName),
+                        onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (ctx) => SignupScreen())),
                         child: Text(
                           'Sign Up',
                           style: TextStyle(

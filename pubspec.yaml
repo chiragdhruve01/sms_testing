@@ -43,6 +43,7 @@ dependencies:
   shared_preferences: ^2.0.15
   nb_utils: ^4.6.25
   intl: ^0.17.0
+  email_validator: ^2.1.17
     
 
 

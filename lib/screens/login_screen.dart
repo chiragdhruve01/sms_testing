@@ -9,11 +9,7 @@ import 'package:sms/screens/successful_screen.dart';
 // import '../services/auth_service.dart';
 
 class LoginScreen extends StatelessWidget {
-  static const routeName = '/login-screen';
   final Auth authService = Auth();
-
-  // final AuthService authService = AuthService();
-
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -76,6 +72,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -93,7 +90,6 @@ class LoginScreen extends StatelessWidget {
               height: 510,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.white,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(15),
                     topRight: Radius.circular(15)),
@@ -111,14 +107,10 @@ class LoginScreen extends StatelessWidget {
                         TextInputType.visiblePassword),
                     Container(
                       height: 55,
-                      // for an exact replicate, remove the padding.
-                      // pour une réplique exact, enlever le padding.
                       padding:
                           const EdgeInsets.only(top: 5, left: 70, right: 70),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 40.0, vertical: 20.0),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0)),
                         ),
@@ -212,7 +204,11 @@ class LoginScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 20),
                     Center(
-                      child: Text('Forgot password ?'),
+                      child: Text('Forgot password ?',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          )),
                     ),
                     /*
                     SizedBox(height: 20),
