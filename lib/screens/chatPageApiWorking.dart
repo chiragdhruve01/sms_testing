@@ -3,7 +3,9 @@ import 'dart:convert';
 // import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sms/screens/Menu.dart';
+import 'package:sms/utils/constants.dart';
 import 'package:intl/intl.dart';
 
 // import '../models/chatusersmodels.dart';
@@ -19,6 +21,7 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   late Future<List<Countuser>> countuser;
   List<Countuser>? chatUsers = [];
+  dynamic newtoken = "";
 
   @override
   void initState() {
@@ -27,14 +30,19 @@ class _ChatPageState extends State<ChatPage> {
     getEmployeeList();
   }
 
+  Future<String> getPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    bool CheckValue = prefs.containsKey('token');
+    var token = "";
+    if (CheckValue == true) {
+      token = prefs.getString('token')!;
+    }
+    return token;
+  }
+
   getEmployeeList() async {
-    // ignore: prefer_const_declarations
-    // final url =
-    //     'https://messaging.care/getuserMsg/d1c2b97e-e9b2-40ef-8de9-179c987651bd';
-    final url = Uri.http('172.31.199.45:8000',
-        '/getuserMsg/b0343af1-587e-4084-b62e-4fd91ec4edbb');
-    // final response = await get(url);
-    // Uri.https(apiUrl, method, queryParameters)
+    String token = await getPrefs();
+    final url = Uri.http(urlLogindomain, '${usergetmsg}${token}');
     final response = await http.get(url);
 
     // final response = await http.Client().get(Uri.https(url));
@@ -234,7 +242,8 @@ class _ChatPageState extends State<ChatPage> {
                 // ));
                 return ConversationAPIList(
                   contact: chatUsers![index].contact,
-                  date: DateFormat('E, d MMM, yyyy').format(chatUsers![index].date!),
+                  date: DateFormat('E, d MMM, yyyy')
+                      .format(chatUsers![index].date!),
 // chatUsers![index].date!.toString(),
                   firstName: chatUsers![index].firstName != null
                       ? chatUsers![index].firstName!

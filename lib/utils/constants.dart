@@ -7,6 +7,11 @@ const kSecondaryColor = Color(0xFF265DAB);
 // TODO Implement this library.
 const urlAuth = "hello";
 const urlLogin = "http://172.31.199.45:8000";
+const urlLogindomain  = "172.31.199.45:8000";
+
 // const urlLogin = "http://10.0.2.2:8000";
 // const urlLogin = "http://localhost:8000";
 const apiKey = "hello";
+
+// routes
+const usergetmsg = "/getuserMsg/";
