@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> {
     ChatPage(),
     SMSMenu(),
     WelcomeScreen(),
-    ChatDetailPage(),
+    // ChatDetailPage(),
   ];
 
   @override

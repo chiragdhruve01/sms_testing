@@ -38,7 +38,7 @@ class _ConversationAPIList extends State<ConversationAPIList> {
         print(widget.room);
         print(widget.contact);
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return ChatDetailPage();
+          return ChatDetailPage(room: widget.room!);
         }));
       },
       child: Container(

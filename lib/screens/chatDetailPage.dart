@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import '../models/chatmessagemodel.dart';
 
 class ChatDetailPage extends StatefulWidget {
+  const ChatDetailPage({Key? key, required this.room}) : super(key: key);
+  final String room;
   @override
   _ChatDetailPageState createState() => _ChatDetailPageState();
 }

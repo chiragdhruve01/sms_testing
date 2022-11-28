@@ -244,7 +244,6 @@ class _ChatPageState extends State<ChatPage> {
                   contact: chatUsers![index].contact,
                   date: DateFormat('E, d MMM, yyyy')
                       .format(chatUsers![index].date!),
-// chatUsers![index].date!.toString(),
                   firstName: chatUsers![index].firstName != null
                       ? chatUsers![index].firstName!
                       : '',
