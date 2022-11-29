@@ -15,3 +15,4 @@ const apiKey = "hello";
 
 // routes
 const usergetmsg = "/getuserMsg/";
+const usergetroommsg = "/getRoomChats/";

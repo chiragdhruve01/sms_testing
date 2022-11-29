@@ -1,8 +1,10 @@
 import 'dart:convert';
+// ignore: unused_import
 import 'dart:typed_data';
+import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
-
+import 'package:sms/utils/constants.dart';
 import '../models/chatmessagemodel.dart';
 
 class ChatDetailPage extends StatefulWidget {
@@ -13,19 +15,59 @@ class ChatDetailPage extends StatefulWidget {
 }
 
 class _ChatDetailPageState extends State<ChatDetailPage> {
+  List<dynamic>? messages = [];
+
+  @override
+  void initState() {
+    getRoomUserMessages(this.room);
+    super.initState();
+    if (this.room.isNotEmpty) {
+      Future.delayed(Duration.zero, () {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Hello msg came" + this.room),
+          backgroundColor: Colors.deepOrange,
+        ));
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Hello no msg"),
+        backgroundColor: Colors.deepOrange,
+      ));
+    }
+  }
+
+  getRoomUserMessages(room) async {
+    final url = Uri.http(urlLogindomain, '${usergetroommsg}${room}');
+    // print("url getRoomUserMessages" + url.toString());
+    final response = await http.get(url);
+    // print("response" + response.body.toString());
+    // final json = "[" + response.body + "]";
+
+    final jsonData = jsonDecode(response.body);
+    print("response.body" + jsonData[0]);
+    print("response.body" + jsonData.length.toString());
+    messages = [jsonData];
+    // print("jsonData" + jsonData['chats']);
+    // print("jsonData"+jsonData.chats);
+    // print("jsonData" + jsonData.toString());
+    // print('DATA ==== ' + chatUsers!.length.toString());
+    setState(() {});
+  }
+
+  // getRoomUserMessages();
   _ChatDetailPageState({required this.room});
   final String room;
-
-  List<ChatMessage> messages = [
-    ChatMessage(messageContent: "Hello, Will", messageType: "receiver"),
-    ChatMessage(messageContent: "How have you been?", messageType: "receiver"),
-    ChatMessage(
-        messageContent: "Hey Kriss, I am doing fine dude. wbu?",
-        messageType: "sender"),
-    ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
-    ChatMessage(
-        messageContent: "Is there any thing wrong?", messageType: "sender"),
-  ];
+  // print(room);
+  // List<ChatMessage> messages = [
+  //   ChatMessage(messageContent: "Hello, Will", messageType: "receiver"),
+  //   ChatMessage(messageContent: "How have you been?", messageType: "receiver"),
+  //   ChatMessage(
+  //       messageContent: "Hey Kriss, I am doing fine dude. wbu?",
+  //       messageType: "sender"),
+  //   ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
+  //   ChatMessage(
+  //       messageContent: "Is there any thing wrong?", messageType: "sender"),
+  // ];
   // late Uint8List _bytes = base64Decode(imsf.split(',').last);
   @override
   Widget build(BuildContext context) {
@@ -94,28 +136,34 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       body: Stack(
         children: <Widget>[
           ListView.builder(
-            itemCount: messages.length,
+            itemCount: messages?.length,
             shrinkWrap: true,
             padding: EdgeInsets.only(top: 10, bottom: 10),
             physics: NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
+              print("messages!.length" + messages!.length.toString());
+              // print("index" + index.toString());
+              // print("messages![index]." + messages![index]['chats'][index]['text'].toString());
+              // print("messages![index]." + messages![index]['chats'].toString());
               return Container(
                 padding:
                     EdgeInsets.only(left: 14, right: 14, top: 10, bottom: 10),
                 child: Align(
-                  alignment: (messages[index].messageType == "receiver"
-                      ? Alignment.topLeft
-                      : Alignment.topRight),
+                  // alignment: (messages[index].messageType == "receiver"
+                  //     ? Alignment.topLeft
+                  //     : Alignment.topRight),
+                  alignment: Alignment.topLeft,
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: (messages[index].messageType == "receiver"
-                          ? Colors.grey.shade200
-                          : Colors.blue[200]),
+                      color: Colors.blue[200],
+                      // color: (messages[index].messageType == "receiver"
+                      //     ? Colors.grey.shade200
+                      //     : Colors.blue[200]),
                     ),
                     padding: EdgeInsets.all(16),
                     child: Text(
-                      messages[index].messageContent!,
+                      messages![index]['chats'][index]['text']!,
                       style: TextStyle(fontSize: 15),
                     ),
                   ),

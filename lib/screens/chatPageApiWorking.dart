@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 // import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sms/screens/Menu.dart';
 import 'package:sms/utils/constants.dart';
@@ -10,6 +9,7 @@ import 'package:intl/intl.dart';
 
 // import '../models/chatusersmodels.dart';
 import '../models/chat.dart';
+// ignore: unused_import
 import '../widgets/conversationList.dart';
 import '../widgets/conversationListAPI.dart';
 
