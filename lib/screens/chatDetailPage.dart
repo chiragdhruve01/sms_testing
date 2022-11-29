@@ -19,18 +19,18 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   @override
   void initState() {
-    getRoomUserMessages(this.room);
+    // getRoomUserMessages(this.room);
     super.initState();
     if (this.room.isNotEmpty) {
       Future.delayed(Duration.zero, () {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Hello msg came" + this.room),
+          content: Text("Welcome Chats for " + this.room),
           backgroundColor: Colors.deepOrange,
         ));
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Hello no msg"),
+        content: Text("No Data Found"),
         backgroundColor: Colors.deepOrange,
       ));
     }
@@ -190,7 +190,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                 } else {
                   return const Center(
                       child: ListTile(
-                          title: Text('No Data Found',
+                          title: Text('',
                               style: TextStyle(
                                 color: Colors.blueAccent,
                                 fontWeight: FontWeight.w700,
