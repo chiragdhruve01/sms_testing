@@ -58,6 +58,19 @@ class AuthService {
     // return res.body;
   }
 
+  Future<List> getUserRoomChats(String token) async {
+    try {
+      var res = await get(Uri.parse('${avdbaseUrl}accTokengwm/$token'));
+      if (res.statusCode == 200) {
+        return jsonDecode(res.body);
+      } else {
+        return Future.error("server error");
+      }
+    } catch (e) {
+      return Future.error(e);
+    }
+  }
+
   Future<List> getUsers() async {
     try {
       var response = await get(Uri.parse('${liveUrl}'));
