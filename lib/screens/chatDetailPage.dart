@@ -36,23 +36,24 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     }
   }
 
-  getRoomUserMessages(room) async {
-    final url = Uri.http(urlLogindomain, '${usergetroommsg}${room}');
-    // print("url getRoomUserMessages" + url.toString());
-    final response = await http.get(url);
-    // print("response" + response.body.toString());
-    // final json = "[" + response.body + "]";
-
-    final jsonData = jsonDecode(response.body);
-    print("response.body" + jsonData[0]);
-    print("response.body" + jsonData.length.toString());
-    messages = [jsonData];
-    // print("jsonData" + jsonData['chats']);
-    // print("jsonData"+jsonData.chats);
-    // print("jsonData" + jsonData.toString());
-    // print('DATA ==== ' + chatUsers!.length.toString());
-    setState(() {});
+  Future<List> getRoomUserMessages(room) async {
+    try {
+      final url = Uri.http(urlLogindomain, '${usergetroommsg}${room}');
+      final response = await http.get(url);
+      var data = jsonDecode(response.body);
+      return data['chats'];
+    } catch (e) {
+      return Future.error(e);
+    }
   }
+
+  // getRoomUserMessages(room) async {
+  //   final url = Uri.http(urlLogindomain, '${usergetroommsg}${room}');
+  //   final response = await http.get(url);
+  //   final jsonData = jsonDecode(response.body);
+  //   messages = [jsonData];
+  //   setState(() {});
+  // }
 
   // getRoomUserMessages();
   _ChatDetailPageState({required this.room});
@@ -135,42 +136,112 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       ),
       body: Stack(
         children: <Widget>[
-          ListView.builder(
-            itemCount: messages?.length,
-            shrinkWrap: true,
-            padding: EdgeInsets.only(top: 10, bottom: 10),
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              print("messages!.length" + messages!.length.toString());
-              // print("index" + index.toString());
-              // print("messages![index]." + messages![index]['chats'][index]['text'].toString());
-              // print("messages![index]." + messages![index]['chats'].toString());
-              return Container(
-                padding:
-                    EdgeInsets.only(left: 14, right: 14, top: 10, bottom: 10),
-                child: Align(
-                  // alignment: (messages[index].messageType == "receiver"
-                  //     ? Alignment.topLeft
-                  //     : Alignment.topRight),
-                  alignment: Alignment.topLeft,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.blue[200],
-                      // color: (messages[index].messageType == "receiver"
-                      //     ? Colors.grey.shade200
-                      //     : Colors.blue[200]),
-                    ),
-                    padding: EdgeInsets.all(16),
-                    child: Text(
-                      messages![index]['chats'][index]['text']!,
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
+          FutureBuilder<List>(
+              future: getRoomUserMessages(this.room),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    itemCount: snapshot.data?.length,
+                    itemBuilder: (context, i) {
+                      return Card(
+                        child: ListTile(
+                            tileColor: Colors.grey[300],
+                            title: Text(
+                              (snapshot.data![i]['contact']['firstName'] !=
+                                      null)
+                                  ? snapshot.data![i]['contact']['firstName'] +
+                                      " " +
+                                      snapshot.data![i]['contact']['lastName']
+                                  : snapshot.data![i]['contact']
+                                          ['contactPhone'] +
+                                      " " +
+                                      snapshot.data![i]['contact']
+                                          ['formatcontact'],
+                            ),
+                            subtitle: Text(
+                              snapshot.data![i]['text'],
+                              style: const TextStyle(
+                                  backgroundColor: Colors.orange,
+                                  color: Colors.white),
+                            ),
+                            trailing: SizedBox(
+                              height: 100,
+                              width: 100,
+                              child: snapshot.data![i]['sender'] == null ||
+                                      (snapshot.data![i]['sender']['image'] ==
+                                              "" ||
+                                          snapshot.data![i]['sender']
+                                                  ['image'] ==
+                                              null)
+                                  ? const Image(
+                                      image: AssetImage('assets/logo/two.jpg'),
+                                    )
+                                  : Image(
+                                      image: NetworkImage(
+                                        'http://172.31.199.45:8000' +
+                                            snapshot.data![i]['sender']
+                                                ['image'],
+                                      ),
+                                    ),
+                            )),
+                      );
+                    },
+                  );
+                } else {
+                  return const Center(
+                      child: ListTile(
+                          title: Text('No Data Found',
+                              style: TextStyle(
+                                color: Colors.blueAccent,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 18.0,
+                                fontFamily: 'Roboto',
+                              )),
+                          leading: SizedBox(
+                            height: 100,
+                            width: 100,
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          )));
+                }
+              }),
+          // ListView.builder(
+          //   itemCount: messages?.length,
+          //   shrinkWrap: true,
+          //   padding: EdgeInsets.only(top: 10, bottom: 10),
+          //   physics: NeverScrollableScrollPhysics(),
+          //   itemBuilder: (context, index) {
+          //     print("messages!.length" + messages!.length.toString());
+          //     // print("index" + index.toString());
+          //     // print("messages![index]." + messages![index]['chats'][index]['text'].toString());
+          //     // print("messages![index]." + messages![index]['chats'].toString());
+          //     return Container(
+          //       padding:
+          //           EdgeInsets.only(left: 14, right: 14, top: 10, bottom: 10),
+          //       child: Align(
+          //         // alignment: (messages[index].messageType == "receiver"
+          //         //     ? Alignment.topLeft
+          //         //     : Alignment.topRight),
+          //         alignment: Alignment.topLeft,
+          //         child: Container(
+          //           decoration: BoxDecoration(
+          //             borderRadius: BorderRadius.circular(20),
+          //             color: Colors.blue[200],
+          //             // color: (messages[index].messageType == "receiver"
+          //             //     ? Colors.grey.shade200
+          //             //     : Colors.blue[200]),
+          //           ),
+          //           padding: EdgeInsets.all(16),
+          //           child: Text(
+          //             messages![index]['chats'][index]['text']!,
+          //             style: TextStyle(fontSize: 15),
+          //           ),
+          //         ),
+          //       ),
+          //     );
+          //   },
+          // ),
           Align(
             alignment: Alignment.bottomLeft,
             child: Container(
