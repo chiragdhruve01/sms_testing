@@ -15,4 +15,6 @@ const apiKey = "hello";
 
 // routes
 const usergetmsg = "/getuserMsg/";
+const superAdminMsg = "/superAdminMsg/";
+const accTokenuser = "/user/getUserAppDetails/";
 const usergetroommsg = "/getRoomChats/";

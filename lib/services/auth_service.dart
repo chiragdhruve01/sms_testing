@@ -2,6 +2,8 @@ import 'package:http/http.dart';
 // import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:sms/utils/constants.dart';
+
 class Album {
   final String firstName;
   final String lastName;
@@ -79,6 +81,20 @@ class AuthService {
       // print("response ${data['serializer']}");
       if (response.statusCode == 200) {
         return data['serializer'];
+      } else {
+        return Future.error("server error");
+      }
+    } catch (e) {
+      return Future.error(e);
+    }
+  }
+
+  getUserDetails(String token) async {
+    try {
+      var response = await get(Uri.parse('${urlLogin}${accTokenuser}$token'));
+      var data = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        return data['data'];
       } else {
         return Future.error("server error");
       }
