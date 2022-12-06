@@ -95,7 +95,7 @@ class _ConversationAPIList extends State<ConversationAPIList> {
                                     horizontal: 7, vertical: 3),
                                 decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: Colors.blue[300]),
+                                    color: Color.fromARGB(255, 92, 178, 248)),
                                 child: Text(
                                   widget.total!.toString(),
                                   style: TextStyle(
@@ -103,6 +103,9 @@ class _ConversationAPIList extends State<ConversationAPIList> {
                                     color: Colors.white,
                                   ),
                                 ),
+                              ),
+                              const SizedBox(
+                                width: 6,
                               ),
                               widget.unread! != 0
                                   ? Container(

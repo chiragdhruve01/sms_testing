@@ -94,7 +94,7 @@ class AuthService {
       var response = await get(Uri.parse('${urlLogin}${accTokenuser}$token'));
       var data = jsonDecode(response.body);
       if (response.statusCode == 200) {
-        return data['data'];
+        return data;
       } else {
         return Future.error("server error");
       }

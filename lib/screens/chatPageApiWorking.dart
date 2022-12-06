@@ -24,6 +24,7 @@ class _ChatPageState extends State<ChatPage> {
   List<Countuser>? chatUsers = [];
   dynamic newtoken = "";
   dynamic user;
+  static UserDetails userDetails = UserDetails();
 
   final AuthService authService = AuthService();
   @override
@@ -47,7 +48,8 @@ class _ChatPageState extends State<ChatPage> {
     String token = await getPrefs();
     dynamic url;
     user = await authService.getUserDetails(token);
-    if (user['userType'] == 'superadmin') {
+    userDetails = UserDetails.fromJson(user);
+    if (userDetails.data!.userType == 'superadmin') {
       url = Uri.http(urlLogindomain, '${superAdminMsg}${token}');
     } else {
       url = Uri.http(urlLogindomain, '${usergetmsg}${token}');
@@ -148,7 +150,11 @@ class _ChatPageState extends State<ChatPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
-                      "Conversations",
+                      userDetails.data != null
+                          ? userDetails.data!.company!.companyName! +
+                              " " +
+                              userDetails.data!.company!.contactPhone!
+                          : "",
                       style:
                           TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                     ),
