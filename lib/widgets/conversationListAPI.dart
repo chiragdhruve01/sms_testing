@@ -37,9 +37,20 @@ class _ConversationAPIList extends State<ConversationAPIList> {
         // print("value" + context);
         print(widget.room);
         print(widget.contact);
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return ChatDetailPage(room: widget.room!);
-        }));
+        Navigator.of(context)
+            .push(
+          MaterialPageRoute(
+            builder: (context) => ChatDetailPage(room: widget.room!),
+          ),
+        )
+            .then((_) {
+          print("back called so refresh again");
+          ChatDetailPage(room: widget.room!);
+        });
+        // Navigator.push(context, MaterialPageRoute(builder: (context) {
+        //   return ChatDetailPage(room: widget.room!);
+        // })
+        // );
       },
       child: Container(
         padding: EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
