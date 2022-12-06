@@ -26,7 +26,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     if (this.room.isNotEmpty) {
       Future.delayed(Duration.zero, () {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Welcome Chats for " + this.room),
+          duration: Duration(seconds: 1),
+          content: Text("Welcome"),
           backgroundColor: Colors.deepOrange,
         ));
       });

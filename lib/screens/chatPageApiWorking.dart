@@ -240,10 +240,10 @@ class _ChatPageState extends State<ChatPage> {
                 //     title: Text(
                 //   chatUsers![index].contact!.toString(),
                 // ));
+                dynamic test = chatUsers![index].date!.toLocal();
                 return ConversationAPIList(
                   contact: chatUsers![index].contact,
-                  date: DateFormat('E, d MMM, yyyy')
-                      .format(chatUsers![index].date!),
+                  date: DateFormat('E, d MMM, yyyy h:mm a').format(test),
                   firstName: chatUsers![index].firstName != null
                       ? chatUsers![index].firstName!
                       : '',
