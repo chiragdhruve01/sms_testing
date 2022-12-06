@@ -82,11 +82,18 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   width: 2,
                 ),
                 CircleAvatar(
-                  backgroundImage: NetworkImage((messages!.isNotEmpty &&
-                          messages![0]['contact']['image'] != null)
-                      ? '${contants.urlLogin}' +
-                          messages![0]['contact']['image']
-                      : "http://172.31.199.45:8000/media/user/pexels4.jpg"),
+                  backgroundImage: messages!.isNotEmpty &&
+                          messages![0]['contact']['image'] != null
+                      ? NetworkImage(
+                          '${contants.urlLogin}' +
+                              messages![0]['contact']['image'],
+                        )
+                      : AssetImage('assets/logo/two.jpg') as ImageProvider,
+                  // backgroundImage: NetworkImage((messages!.isNotEmpty &&
+                  //         messages![0]['contact']['image'] != null)
+                  //     ? '${contants.urlLogin}' +
+                  //         messages![0]['contact']['image']
+                  //     : "http://172.31.199.45:8000/media/user/pexels4.jpg"),
                   backgroundColor: Colors.transparent,
                   maxRadius: 20,
                 ),
