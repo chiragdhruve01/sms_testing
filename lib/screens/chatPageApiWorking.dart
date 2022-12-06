@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sms/screens/Menu.dart';
+import 'package:sms/services/auth_service.dart';
 import 'package:sms/utils/constants.dart';
 import 'package:intl/intl.dart';
 
@@ -22,7 +23,9 @@ class _ChatPageState extends State<ChatPage> {
   late Future<List<Countuser>> countuser;
   List<Countuser>? chatUsers = [];
   dynamic newtoken = "";
+  dynamic user;
 
+  final AuthService authService = AuthService();
   @override
   void initState() {
     super.initState();
@@ -42,10 +45,14 @@ class _ChatPageState extends State<ChatPage> {
 
   getEmployeeList() async {
     String token = await getPrefs();
-    final url = Uri.http(urlLogindomain, '${usergetmsg}${token}');
+    dynamic url;
+    user = await authService.getUserDetails(token);
+    if (user['userType'] == 'superadmin') {
+      url = Uri.http(urlLogindomain, '${superAdminMsg}${token}');
+    } else {
+      url = Uri.http(urlLogindomain, '${usergetmsg}${token}');
+    }
     final response = await http.get(url);
-
-    // final response = await http.Client().get(Uri.https(url));
     final jsonData = jsonDecode(response.body);
     final chatData = Chat.fromJson(jsonData);
     chatUsers = chatData.countuser!;

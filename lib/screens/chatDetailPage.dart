@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:sms/utils/constants.dart';
 import '../models/chatmessagemodel.dart';
+import 'package:sms/utils/constants.dart' as contants;
 
 class ChatDetailPage extends StatefulWidget {
   const ChatDetailPage({Key? key, required this.room}) : super(key: key);
@@ -80,9 +81,12 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                 const SizedBox(
                   width: 2,
                 ),
-                const CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      "http://172.31.199.45:8000/media/user/pexels4.jpg"),
+                CircleAvatar(
+                  backgroundImage: NetworkImage((messages!.isNotEmpty &&
+                          messages![0]['contact']['image'] != null)
+                      ? '${contants.urlLogin}' +
+                          messages![0]['contact']['image']
+                      : "http://172.31.199.45:8000/media/user/pexels4.jpg"),
                   backgroundColor: Colors.transparent,
                   maxRadius: 20,
                 ),
@@ -94,8 +98,20 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      const Text(
-                        "Kriss Benwat",
+                      Text(
+                        messages!.isNotEmpty
+                            ? (messages![0]['contact']['firstName'] == null ||
+                                    messages![0]['contact']['lastName'] == null)
+                                ? messages![0]['contact']['contactPhone']
+                                : messages![0]['contact']['firstName'] +
+                                    " " +
+                                    messages![0]['contact']['lastName']
+                            : "",
+                        // messages!.isNotEmpty
+                        //     ? messages![1]['receiver'] != null
+                        //         ? "receiver not null"
+                        //         : "receiver null"
+                        //     : "is empty",
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w600),
                       ),
