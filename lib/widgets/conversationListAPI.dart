@@ -77,12 +77,40 @@ class _ConversationAPIList extends State<ConversationAPIList> {
                           SizedBox(
                             height: 6,
                           ),
-                          Text(
-                            widget.total!.toString(),
-                            style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.grey.shade600,
-                                fontWeight: FontWeight.bold),
+                          Row(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 7, vertical: 3),
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.blue[300]),
+                                child: Text(
+                                  widget.total!.toString(),
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              widget.unread! != 0
+                                  ? Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 7, vertical: 3),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.red[300]),
+                                      // alignment: Alignment.center,
+                                      child: Text(
+                                        widget.unread!.toString(),
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    )
+                                  : Container(),
+                            ],
                           ),
                         ],
                       ),
