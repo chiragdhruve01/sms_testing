@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
+import 'package:sms/screens/chatPageApiWorking.dart';
 import 'package:sms/utils/constants.dart';
 import '../models/chatmessagemodel.dart';
 import 'package:sms/utils/constants.dart' as contants;
@@ -71,7 +72,11 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
               children: <Widget>[
                 IconButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ChatPage()),
+                    );
+                    // Navigator.pop(context);
                   },
                   icon: const Icon(
                     Icons.arrow_back,
