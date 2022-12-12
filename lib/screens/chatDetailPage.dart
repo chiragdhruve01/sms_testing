@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sms/screens/chatPageApiWorking.dart';
 import 'package:sms/utils/constants.dart';
 import '../models/chatmessagemodel.dart';
@@ -41,10 +42,22 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     }
   }
 
+  Future<String> getAccessToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    bool CheckValue = prefs.containsKey('accessToken');
+    var accessToken = "";
+    if (CheckValue == true) {
+      accessToken = prefs.getString('accessToken')!;
+    }
+    return accessToken;
+  }
+
   Future<List> getRoomUserMessages(room) async {
     try {
+      String accessToken = await getAccessToken();
       final url = Uri.http(urlLogindomain, '${usergetroommsg}${room}');
-      final response = await http.get(url);
+      final response = await http
+          .get(url, headers: {'Authorization': 'Bearer $accessToken'});
       var data = jsonDecode(response.body);
       // answer = jsonDecode(response.body);
       messages = data['chats'];
@@ -72,11 +85,11 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
               children: <Widget>[
                 IconButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ChatPage()),
-                    );
-                    // Navigator.pop(context);
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => ChatPage()),
+                    // );
+                    Navigator.pop(context);
                   },
                   icon: const Icon(
                     Icons.arrow_back,

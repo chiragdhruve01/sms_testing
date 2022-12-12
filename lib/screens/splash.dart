@@ -12,29 +12,39 @@ class Splash extends StatefulWidget {
 
 Future<String> getPrefs() async {
   final prefs = await SharedPreferences.getInstance();
+  // ignore: non_constant_identifier_names
   bool CheckValue = prefs.containsKey('token');
-  print("CheckValue " + CheckValue.toString());
   var token = "";
   if (CheckValue == true) {
     token = prefs.getString('token')!;
-    print("okay token " + prefs.getString('token')!);
   }
-  print("token: " + token);
   return token;
+}
+
+Future<String> getAccessToken() async {
+  final prefs = await SharedPreferences.getInstance();
+  // ignore: non_constant_identifier_names
+  bool CheckValue = prefs.containsKey('accessToken');
+  var accessToken = "";
+  if (CheckValue == true) {
+    accessToken = prefs.getString('accessToken')!;
+  }
+  return accessToken;
 }
 
 class _SplashState extends State<Splash> {
   dynamic newtoken = "";
+  dynamic newaccessToken = "";
 
   void checkToken() async {
-    print("check token");
     // if (Platform.isWindows) {
     // } else if (Platform.isIOS) {
     // }
     String tokens = await getPrefs();
-    print("tokens" + tokens);
+    String accessToken = await getAccessToken();
     // var tokens = await storage.read(key: "token");
     newtoken = tokens;
+    newaccessToken = accessToken;
   }
 
   void initState() {
@@ -51,12 +61,14 @@ class _SplashState extends State<Splash> {
   void navigationPage() {
     setState(
       () {
-        print("newtoken" + newtoken);
-        if (newtoken == null || newtoken == "") {
+        if (newtoken == null ||
+            newtoken == "" ||
+            newaccessToken == null ||
+            newaccessToken == "") {
           LoginScreen().launch(context);
         } else {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => HomePage()));
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => HomePage()));
           // const HomeScreen(errMsg: '').launch(context);
           // Dashboard().launch(context);
         }
@@ -104,8 +116,7 @@ class _SplashState extends State<Splash> {
                   ),
                   // Text(gateway_app_Name,style:boldTextStyle(color: gateway_TextColorWhite, size: 30),).paddingOnly(bottom: spacing_standard),
                   Text('SMS',
-                          style:
-                              boldTextStyle(color: Colors.white, size: 14))
+                          style: boldTextStyle(color: Colors.white, size: 14))
                       .paddingOnly(top: 20.00),
                 ],
               ),

@@ -44,8 +44,19 @@ class _ChatPageState extends State<ChatPage> {
     return token;
   }
 
+  Future<String> getAccessToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    bool CheckValue = prefs.containsKey('accessToken');
+    var accessToken = "";
+    if (CheckValue == true) {
+      accessToken = prefs.getString('accessToken')!;
+    }
+    return accessToken;
+  }
+
   getEmployeeList() async {
     String token = await getPrefs();
+    String accessToken = await getAccessToken();
     dynamic url;
     user = await authService.getUserDetails(token);
     userDetails = UserDetails.fromJson(user);
@@ -54,7 +65,8 @@ class _ChatPageState extends State<ChatPage> {
     } else {
       url = Uri.http(urlLogindomain, '${usergetmsg}${token}');
     }
-    final response = await http.get(url);
+    final response =
+        await http.get(url, headers: {'Authorization': 'Bearer $accessToken'});
     final jsonData = jsonDecode(response.body);
     final chatData = Chat.fromJson(jsonData);
     chatUsers = chatData.countuser!;

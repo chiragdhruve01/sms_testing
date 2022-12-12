@@ -167,6 +167,7 @@ dialogContent(BuildContext context) {
   Future<void> removePrefs() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
+    await prefs.remove('accessToken');
   }
 
   return Container(

@@ -1,4 +1,6 @@
+// ignore_for_file: unnecessary_brace_in_string_interps
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -77,7 +79,6 @@ class AuthService {
     try {
       var response = await get(Uri.parse('${liveUrl}'));
       var data = jsonDecode(response.body);
-      print("response ${data}");
       // print("response ${data['serializer']}");
       if (response.statusCode == 200) {
         return data['serializer'];
@@ -91,7 +92,11 @@ class AuthService {
 
   getUserDetails(String token) async {
     try {
-      var response = await get(Uri.parse('${urlLogin}${accTokenuser}$token'));
+      final prefs = await SharedPreferences.getInstance();
+      String accessToken = prefs.getString('accessToken')!;
+      var response = await get(Uri.parse('${urlLogin}${accTokenuser}$token'),
+          headers: {'Authorization': 'Bearer $accessToken'});
+
       var data = jsonDecode(response.body);
       if (response.statusCode == 200) {
         return data;

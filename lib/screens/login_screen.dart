@@ -60,14 +60,20 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Future<void> savePrefs(String token) async {
+  Future<void> savePrefs(String token, String accessToken) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', token);
+    await prefs.setString('accessToken', accessToken);
   }
 
   Future<String> getPrefs() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('token')!;
+  }
+
+  Future<String> getaccessToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('accessToken')!;
   }
 
   @override
@@ -128,7 +134,8 @@ class LoginScreen extends StatelessWidget {
                               print(data['error']);
                               print(data['success']);
                               print('API Token = ' + data['data']['uuid']);
-                              await savePrefs(data['data']['uuid']);
+                              await savePrefs(data['data']['uuid'],
+                                  data['data']['accessToken']);
                               String token = await getPrefs();
                               print('Pref Token = ' + token);
                               if (data.runtimeType == String) {
