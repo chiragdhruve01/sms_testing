@@ -13,6 +13,7 @@ import '../models/chat.dart';
 // ignore: unused_import
 import '../widgets/conversationList.dart';
 import '../widgets/conversationListAPI.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ChatPage extends StatefulWidget {
   @override
@@ -25,13 +26,29 @@ class _ChatPageState extends State<ChatPage> {
   dynamic newtoken = "";
   dynamic user;
   static UserDetails userDetails = UserDetails();
-
+  final _channel = WebSocketChannel.connect(
+    Uri.parse(wsprotocol + '://' + wsdomain + wsurlchat + "3/1/"),
+  );
   final AuthService authService = AuthService();
   @override
   void initState() {
     super.initState();
     // countuser = getEmployeeList();
     getEmployeeList();
+    websocket();
+  }
+
+  websocket() async {
+    _channel.stream.listen((message) {
+      print("message" + message);
+      getEmployeeList();
+    });
+  }
+
+  @override
+  void dispose() {
+    _channel.sink.close();
+    super.dispose();
   }
 
   Future<String> getPrefs() async {
@@ -71,7 +88,9 @@ class _ChatPageState extends State<ChatPage> {
     final chatData = Chat.fromJson(jsonData);
     chatUsers = chatData.countuser!;
     print('DATA ==== ' + chatUsers!.length.toString());
-    setState(() {});
+    setState(() {
+      chatUsers;
+    });
   }
 
   // List<dynamic> chatUsers = [
@@ -155,6 +174,12 @@ class _ChatPageState extends State<ChatPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            // StreamBuilder(
+            //   stream: _channel.stream,
+            //   builder: (context, snapshot) {
+            //     return snapshot.hasData ? testfunction() : Container();
+            //   },
+            // ),
             SafeArea(
               child: Padding(
                 padding: EdgeInsets.only(left: 16, right: 16, top: 10),
