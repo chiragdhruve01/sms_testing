@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sms/screens/Menu.dart';
 import 'package:sms/services/auth_service.dart';
+import 'package:sms/services/notifications.dart';
 import 'package:sms/utils/constants.dart';
 import 'package:intl/intl.dart';
 
@@ -36,6 +37,7 @@ class _ChatPageState extends State<ChatPage> {
     // countuser = getEmployeeList();
     getEmployeeList();
     websocket();
+    FCMPushNotifications().init();
   }
 
   websocket() async {
@@ -165,6 +167,7 @@ class _ChatPageState extends State<ChatPage> {
   // ];
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       // body: SingleChildScrollView(
       //   child: Center(child: Text("Chat")),
@@ -192,8 +195,8 @@ class _ChatPageState extends State<ChatPage> {
                               " " +
                               userDetails.data!.company!.contactPhone!
                           : "",
-                      style:
-                          TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: width * 0.04, fontWeight: FontWeight.bold),
                     ),
                     Container(
                       padding:
@@ -214,16 +217,21 @@ class _ChatPageState extends State<ChatPage> {
                             width: 2,
                           ),
                           InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => SMSMenu()));
-                            },
+                            onTap: () =>
+                                FCMPushNotifications().showNotification(
+                              title: 'Death',
+                              body: 'Beautiful',
+                            ),
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => SMSMenu()));
+
                             child: Text(
                               "Add New",
                               style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.bold),
+                                  fontSize: width * 0.03,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                         ],
