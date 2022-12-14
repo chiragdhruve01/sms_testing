@@ -32,21 +32,14 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void initState() {
     super.initState();
-    FCMPushNotifications().init();
     // countuser = getEmployeeList();
     getEmployeeList();
     websocket();
   }
 
   websocket() async {
-    print("*******************************");
-    print("*******************************");
     String? deviceToken = await FCMPushNotifications().getDeviceToken();
-    print("*******************************");
     print("deviceToken" + deviceToken.toString());
-    print("*******************************");
-    print("*******************************");
-    print("*******************************");
     _channel.stream.listen((message) {
       print("message" + message);
       getEmployeeList();
