@@ -1,12 +1,20 @@
 import 'dart:developer';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import '../utils/utils.dart';
 
 class FCMPushNotifications {
+  final FirebaseMessaging fcm = FirebaseMessaging.instance;
+
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
+
+  Future<String> getDeviceToken() async {
+    final deviceId = await fcm.getToken();
+    return deviceId!;
+  }
 
   Future<void> showNotification({
     int id = 0,
