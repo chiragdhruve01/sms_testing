@@ -166,6 +166,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     return Scaffold(
       // body: SingleChildScrollView(
       //   child: Center(child: Text("Chat")),
@@ -194,7 +195,7 @@ class _ChatPageState extends State<ChatPage> {
                               userDetails.data!.company!.contactPhone!
                           : "",
                       style: TextStyle(
-                          fontSize: width * 0.04, fontWeight: FontWeight.bold),
+                          fontSize: height * 0.02, fontWeight: FontWeight.bold),
                     ),
                     Container(
                       padding:
@@ -228,7 +229,7 @@ class _ChatPageState extends State<ChatPage> {
                             child: Text(
                               "Add New",
                               style: TextStyle(
-                                  fontSize: width * 0.03,
+                                  fontSize: height * 0.02,
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
