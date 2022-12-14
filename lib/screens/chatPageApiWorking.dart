@@ -216,11 +216,35 @@ class _ChatPageState extends State<ChatPage> {
                             width: 2,
                           ),
                           InkWell(
-                            onTap: () =>
-                                FCMPushNotifications().showNotification(
-                              title: 'Death',
-                              body: 'Beautiful',
-                            ),
+                            onTap: () => (Theme.of(context).platform ==
+                                        TargetPlatform.android ||
+                                    Theme.of(context).platform ==
+                                        TargetPlatform.iOS)
+                                ? FCMPushNotifications().showNotification(
+                                    title: 'Death',
+                                    body: 'Beautiful',
+                                  )
+                                : ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      backgroundColor: Colors.orange,
+                                      behavior: SnackBarBehavior.floating,
+                                      content: Row(
+                                        children: <Widget>[
+                                          Image(
+                                              width: width * .1,
+                                              height: height * .1,
+                                              image: AssetImage(
+                                                  "assets/logo/two.jpg")),
+                                          Text('toast' + ". " + 'message'),
+                                        ],
+                                      ),
+                                      action: SnackBarAction(
+                                        label: 'Action',
+                                        onPressed: () {},
+                                      ),
+                                    ),
+                                  ),
+
                             // Navigator.push(
                             //     context,
                             //     MaterialPageRoute(
