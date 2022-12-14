@@ -50,6 +50,7 @@ dependencies:
   flutter_native_timezone: ^2.0.0
   flutter_launcher_icons: ^0.11.0
   rxdart: ^0.27.7
+  scaffold_gradient_background: ^1.0.3+1
     
 
 
