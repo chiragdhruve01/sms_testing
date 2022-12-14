@@ -64,3 +64,9 @@ websocket() async {
     String? deviceToken = await FCMPushNotifications().getDeviceToken();
     print("deviceToken" + deviceToken.toString());
 }
+
+
+## Links Used
+https://firebase.flutter.dev/docs/messaging/overview/
+https://blog.codemagic.io/flutter-local-notifications/
+https://firebase.flutter.dev/docs/messaging/notifications/

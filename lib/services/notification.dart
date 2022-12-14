@@ -127,6 +127,10 @@ class FCMPushNotifications {
       print('Message also contained a title: ${message.notification!.title}');
       print('Message also contained a body: ${message.notification!.body}');
       ;
+      FirebaseMessaging.onMessageOpenedApp.listen((event) {
+        print("onMessageOpenedApp" + event.toString());
+        // do something
+      });
       showxNotification(message);
     });
 
