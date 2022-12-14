@@ -180,7 +180,13 @@ class _ChatPageState extends State<ChatPage> {
             // StreamBuilder(
             //   stream: _channel.stream,
             //   builder: (context, snapshot) {
-            //     return snapshot.hasData ? testfunction() : Container();
+            //  if (snapshot.hasData) {
+            //       final data = jsonDecode(snapshot.data);
+            //       print("data" + data.toString());
+            //       return Text(data['message'].toString());
+            //     } else {
+            //       return Text('');
+            //     }
             //   },
             // ),
             SafeArea(
