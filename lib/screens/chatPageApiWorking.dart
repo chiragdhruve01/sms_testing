@@ -261,7 +261,7 @@ class _ChatPageState extends State<ChatPage> {
                             child: Text(
                               "Add New",
                               style: TextStyle(
-                                  fontSize: height * 0.02,
+                                  fontSize: height * 0.01,
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
