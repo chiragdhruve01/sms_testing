@@ -1,79 +1,249 @@
-import 'dart:developer';
+import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:rxdart/subjects.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
-import '../utils/utils.dart';
+import 'download_utils.dart';
 
-class FCMPushNotifications {
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+class NotificationService {
+  NotificationService();
+  final text = Platform.isIOS;
+  final BehaviorSubject<String> behaviorSubject = BehaviorSubject();
 
-  Future<void> showNotification({
-    int id = 0,
-    String? title,
-    String? body,
-    String? payload,
-  }) async {
-    final largeImagePath = await Utils.downloadFile(
-        'https://images.unsplash.com/photo-1668102228964-ebc7ca0866b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80',
-        'largeImage');
+  final _localNotifications = FlutterLocalNotificationsPlugin();
+  Future<void> initializePlatformNotifications() async {
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/launcher_icon');
+    // AndroidInitializationSettings('@drawable/two');
+    // AndroidInitializationSettings('two');
 
-    final profilePicPath = await Utils.downloadFile(
-        'https://images.unsplash.com/photo-1668102228964-ebc7ca0866b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80',
-        'profilePic');
+    final IOSInitializationSettings initializationSettingsIOS =
+        IOSInitializationSettings(
+            requestSoundPermission: true,
+            requestBadgePermission: true,
+            requestAlertPermission: true,
+            onDidReceiveLocalNotification: onDidReceiveLocalNotification);
 
-    final styleInformation = BigPictureStyleInformation(
-      FilePathAndroidBitmap(largeImagePath!),
-      largeIcon: FilePathAndroidBitmap(profilePicPath!),
-      contentTitle: title,
-      summaryText: "Heaven",
-      htmlFormatSummaryText: true,
-      htmlFormatContent: true,
+    final InitializationSettings initializationSettings =
+        InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS,
     );
 
-    AndroidNotificationDetails? androidDetails = AndroidNotificationDetails(
+    tz.initializeTimeZones();
+    tz.setLocalLocation(
+      tz.getLocation(
+        await FlutterNativeTimezone.getLocalTimezone(),
+      ),
+    );
+
+    await _localNotifications.initialize(
+      initializationSettings,
+      onSelectNotification: selectNotification,
+    );
+  }
+
+  Future<NotificationDetails> _notificationDetails() async {
+    final bigPicture = await DownloadUtil.downloadAndSaveFile(
+        "https://images.unsplash.com/photo-1668102228964-ebc7ca0866b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+        Platform.isIOS ? "drinkwater.jpg" : "drinkwater");
+
+    AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
       'channel id',
       'channel name',
-      channelDescription: 'Channel Description',
+      groupKey: 'com.example.flutter_push_notifications',
+      channelDescription: 'channel description',
       importance: Importance.max,
-      styleInformation: styleInformation,
+      priority: Priority.max,
+      playSound: true,
+      ticker: 'ticker',
+      largeIcon: FilePathAndroidBitmap(bigPicture),
+      styleInformation: BigPictureStyleInformation(
+        FilePathAndroidBitmap(bigPicture),
+        hideExpandedLargeIcon: false,
+      ),
+      color: const Color(0xff2196f3),
     );
-    var iOSDetails = IOSNotificationDetails();
-    var generalNotificationDetails = NotificationDetails(
-      android: androidDetails,
-      iOS: iOSDetails,
+
+    IOSNotificationDetails iosNotificationDetails = IOSNotificationDetails(
+        threadIdentifier: "thread1",
+        attachments: <IOSNotificationAttachment>[
+          IOSNotificationAttachment(bigPicture)
+        ]);
+
+    final details = await _localNotifications.getNotificationAppLaunchDetails();
+    if (details != null && details.didNotificationLaunchApp) {
+      behaviorSubject.add(details.payload!);
+    }
+
+    NotificationDetails platformChannelSpecifics = NotificationDetails(
+        android: androidPlatformChannelSpecifics, iOS: iosNotificationDetails);
+
+    return platformChannelSpecifics;
+  }
+
+  Future<NotificationDetails> _groupedNotificationDetails() async {
+    const List<String> lines = <String>[
+      'group 1 First drink',
+      'group 1   Second drink',
+      'group 1   Third drink',
+      'group 2 First drink',
+      'group 2   Second drink'
+    ];
+    const InboxStyleInformation inboxStyleInformation = InboxStyleInformation(
+        lines,
+        contentTitle: '5 messages',
+        summaryText: 'missed drinks');
+    AndroidNotificationDetails androidPlatformChannelSpecifics =
+        const AndroidNotificationDetails(
+      'channel id',
+      'channel name',
+      groupKey: 'com.example.flutter_push_notifications',
+      channelDescription: 'channel description',
+      setAsGroupSummary: true,
+      importance: Importance.max,
+      priority: Priority.max,
+      playSound: true,
+      ticker: 'ticker',
+      styleInformation: inboxStyleInformation,
+      color: Color(0xff2196f3),
     );
-    await flutterLocalNotificationsPlugin.show(
+
+    const IOSNotificationDetails iosNotificationDetails =
+        IOSNotificationDetails(threadIdentifier: "thread2");
+
+    final details = await _localNotifications.getNotificationAppLaunchDetails();
+    if (details != null && details.didNotificationLaunchApp) {
+      behaviorSubject.add(details.payload!);
+    }
+
+    NotificationDetails platformChannelSpecifics = NotificationDetails(
+        android: androidPlatformChannelSpecifics, iOS: iosNotificationDetails);
+
+    return platformChannelSpecifics;
+  }
+
+  Future<void> showScheduledLocalNotification({
+    required int id,
+    required String title,
+    required String body,
+    required String payload,
+    required int seconds,
+  }) async {
+    final platformChannelSpecifics = await _notificationDetails();
+    await _localNotifications.zonedSchedule(
       id,
       title,
       body,
-      generalNotificationDetails,
+      tz.TZDateTime.now(tz.local).add(Duration(seconds: seconds)),
+      platformChannelSpecifics,
+      payload: payload,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      androidAllowWhileIdle: true,
+    );
+  }
+
+  Future<void> showLocalNotification({
+    required int id,
+    required String title,
+    required String body,
+    required String payload,
+  }) async {
+    final platformChannelSpecifics = await _notificationDetails();
+    await _localNotifications.show(
+      id,
+      title,
+      body,
+      platformChannelSpecifics,
       payload: payload,
     );
-    log(
-      body!,
-      name: 'FCM',
+  }
+
+  Future<void> showPeriodicLocalNotification({
+    required int id,
+    required String title,
+    required String body,
+    required String payload,
+  }) async {
+    final platformChannelSpecifics = await _notificationDetails();
+    await _localNotifications.periodicallyShow(
+      id,
+      title,
+      body,
+      RepeatInterval.everyMinute,
+      platformChannelSpecifics,
+      payload: payload,
+      androidAllowWhileIdle: true,
     );
   }
 
-  Future<void> onNotifications(String? payload) async {
-    if (payload != null) {}
+  Future<void> showGroupedNotifications({
+    required String title,
+  }) async {
+    final platformChannelSpecifics = await _notificationDetails();
+    final groupedPlatformChannelSpecifics = await _groupedNotificationDetails();
+    await _localNotifications.show(
+      0,
+      "group 1",
+      "First drink",
+      platformChannelSpecifics,
+    );
+    await _localNotifications.show(
+      1,
+      "group 1",
+      "Second drink",
+      platformChannelSpecifics,
+    );
+    await _localNotifications.show(
+      3,
+      "group 1",
+      "Third drink",
+      platformChannelSpecifics,
+    );
+    await _localNotifications.show(
+      4,
+      "group 2",
+      "First drink",
+      Platform.isIOS
+          ? groupedPlatformChannelSpecifics
+          : platformChannelSpecifics,
+    );
+    await _localNotifications.show(
+      5,
+      "group 2",
+      "Second drink",
+      Platform.isIOS
+          ? groupedPlatformChannelSpecifics
+          : platformChannelSpecifics,
+    );
+    await _localNotifications.show(
+      6,
+      Platform.isIOS ? "group 2" : "Attention",
+      Platform.isIOS ? "Third drink" : "5 missed drinks",
+      groupedPlatformChannelSpecifics,
+    );
   }
 
-  Future<void> init({bool initScheduled = false}) async {
-    var androidInitialize =
-        AndroidInitializationSettings('@mipmap/launcher_icon');
-    var iOSInitialize = IOSInitializationSettings();
-    var initializeSettings =
-        InitializationSettings(android: androidInitialize, iOS: iOSInitialize);
-
-    flutterLocalNotificationsPlugin.initialize(initializeSettings,
-        onSelectNotification: notificationSelected);
-    await flutterLocalNotificationsPlugin.initialize(initializeSettings,
-        onSelectNotification: (payload) async {});
+  void onDidReceiveLocalNotification(
+    int id,
+    String? title,
+    String? body,
+    String? payload,
+  ) {
+    print('id $id');
   }
 
-  Future<void> notificationSelected(String? payload) async {
-    onNotifications(payload);
+  void selectNotification(String? payload) {
+    if (payload != null && payload.isNotEmpty) {
+      behaviorSubject.add(payload);
+    }
   }
+
+  void cancelAllNotifications() => _localNotifications.cancelAll();
 }

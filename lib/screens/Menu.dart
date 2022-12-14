@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:sms/screens/login_screen.dart';
+import 'package:sms/screens/screen_notification_1.dart';
 
 class SMSMenu extends StatefulWidget {
   static var tag = "/SMSMenu";
@@ -99,6 +100,30 @@ class _SMSMenuState extends State<SMSMenu> {
                         ],
                       ),
                     ).onTap(() {}),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
+                      child: Row(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Image.asset('assets/logo/two.jpg',
+                                  // color: Color(0xFFE7586A),
+                                  height: 20,
+                                  width: 20),
+                              16.width,
+                              Text("Notification Screen",
+                                  style: primaryTextStyle()),
+                            ],
+                          ).expand(),
+                          Icon(Icons.keyboard_arrow_right, color: Colors.black),
+                        ],
+                      ),
+                    ).onTap(() {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotifyScreen()));
+                    }),
                   ],
                 ),
               ),

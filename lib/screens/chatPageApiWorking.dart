@@ -3,16 +3,14 @@ import 'dart:convert';
 // import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sms/screens/Menu.dart';
 import 'package:sms/services/auth_service.dart';
-import 'package:sms/services/notifications.dart';
 import 'package:sms/utils/constants.dart';
 import 'package:intl/intl.dart';
 
 // import '../models/chatusersmodels.dart';
 import '../models/chat.dart';
 // ignore: unused_import
-import '../widgets/conversationList.dart';
+import '../services/notification.dart';
 import '../widgets/conversationListAPI.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
