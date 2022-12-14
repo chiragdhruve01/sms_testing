@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 // ignore: unused_import
 import 'dart:typed_data';
@@ -20,7 +21,20 @@ class ChatDetailPage extends StatefulWidget {
 
 class _ChatDetailPageState extends State<ChatDetailPage> {
   List<dynamic>? messages = [];
+  final ScrollController scroll = ScrollController();
+
   // late Map<String, dynamic> answer;
+  _scrollToEnd() {
+    setState(() {
+      scroll.animateTo(
+        scroll.position.maxScrollExtent,
+        duration: const Duration(
+          milliseconds: 300,
+        ),
+        curve: Curves.easeOut,
+      );
+    });
+  }
 
   @override
   void initState() {
@@ -52,7 +66,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     return accessToken;
   }
 
-  Future<List> getRoomUserMessages(room) async {
+  Future<void> getRoomUserMessages(room) async {
     try {
       String accessToken = await getAccessToken();
       final url = Uri.http(urlLogindomain, '${usergetroommsg}${room}');
@@ -61,9 +75,35 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       var data = jsonDecode(response.body);
       // answer = jsonDecode(response.body);
       messages = data['chats'];
-      setState(() => messages = data['chats']);
+      setState(() {
+        messages = data['chats'];
+      });
 
-      return data['chats'];
+      Future.delayed(Duration.zero, () {
+        setState(() {
+          scroll.animateTo(
+            scroll.position.maxScrollExtent,
+            duration: const Duration(
+              milliseconds: 300,
+            ),
+            curve: Curves.easeOut,
+          );
+        });
+      });
+
+      // Timer(
+      //     _duration,
+      //     () => setState(() {
+      //           scroll.animateTo(
+      //             scroll.position.maxScrollExtent,
+      //             duration: const Duration(
+      //               milliseconds: 300,
+      //             ),
+      //             curve: Curves.easeOut,
+      //           );
+      //         }));
+
+      // return data['chats'];
     } catch (e) {
       return Future.error(e);
     }
@@ -151,9 +191,12 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     ],
                   ),
                 ),
-                const Icon(
-                  Icons.settings,
+                IconButton(
                   color: Colors.black54,
+                  onPressed: () {
+                    _scrollToEnd();
+                  },
+                  icon: Icon(Icons.settings),
                 ),
               ],
             ),
@@ -166,6 +209,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
             children: <Widget>[
               Expanded(
                 child: ListView.builder(
+                  controller: scroll,
                   itemCount: messages!.length,
                   shrinkWrap: true,
                   physics: const BouncingScrollPhysics(),
