@@ -12,6 +12,9 @@ class SMSMenu extends StatefulWidget {
 }
 
 class _SMSMenuState extends State<SMSMenu> {
+  get height => MediaQuery.of(context).size.height;
+  get width => MediaQuery.of(context).size.width;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,10 +122,33 @@ class _SMSMenuState extends State<SMSMenu> {
                         ],
                       ),
                     ).onTap(() {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => NotifyScreen()));
+                      (Theme.of(context).platform == TargetPlatform.android ||
+                              Theme.of(context).platform == TargetPlatform.iOS)
+                          ? Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => NotifyScreen()))
+                          : ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: Colors.orange,
+                                behavior: SnackBarBehavior.floating,
+                                content: Row(
+                                  children: <Widget>[
+                                    Image(
+                                        width: width * .1,
+                                        height: height * .1,
+                                        image:
+                                            AssetImage("assets/logo/two.jpg")),
+                                    Text('Under Construction, Please Wait'),
+                                  ],
+                                ),
+                                action: SnackBarAction(
+                                  textColor: Colors.pink,
+                                  label: 'okay',
+                                  onPressed: () {},
+                                ),
+                              ),
+                            );
                     }),
                   ],
                 ),
