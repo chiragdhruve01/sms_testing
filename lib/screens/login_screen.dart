@@ -37,8 +37,7 @@ class LoginScreen extends StatelessWidget {
       height: 55,
       margin: EdgeInsets.only(bottom: 15),
       decoration: BoxDecoration(
-          color: Colors.blueGrey.shade200,
-          borderRadius: BorderRadius.circular(30)),
+          color: Colors.white54, borderRadius: BorderRadius.circular(20)),
       child: Padding(
         padding: const EdgeInsets.only(left: 25.0, top: 15, right: 25),
         child: TextField(
@@ -96,7 +95,8 @@ class LoginScreen extends StatelessWidget {
           children: [
             Container(
               height: MediaQuery.of(context).size.height,
-              width: double.infinity,
+              // width: double.infinity,
+              width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(15),
