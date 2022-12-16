@@ -29,6 +29,8 @@ class ConversationAPIList extends StatefulWidget {
 }
 
 class _ConversationAPIList extends State<ConversationAPIList> {
+  get width => MediaQuery.of(context).size.width;
+  get height => MediaQuery.of(context).size.height;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -91,16 +93,17 @@ class _ConversationAPIList extends State<ConversationAPIList> {
                           Row(
                             children: [
                               Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 7, vertical: 3),
+                                padding: EdgeInsets.all(6),
                                 decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: Color.fromARGB(255, 92, 178, 248)),
-                                child: Text(
-                                  widget.total!.toString(),
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    color: Colors.white,
+                                child: Center(
+                                  child: Text(
+                                    widget.total!.toString(),
+                                    style: TextStyle(
+                                      fontSize: width * 0.025,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -135,6 +138,7 @@ class _ConversationAPIList extends State<ConversationAPIList> {
             ),
             Text(
               widget.date!,
+              textAlign: TextAlign.right,
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
           ],

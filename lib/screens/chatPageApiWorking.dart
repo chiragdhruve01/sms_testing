@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'dart:convert';
 // import 'package:http/http.dart';
@@ -195,19 +197,26 @@ class _ChatPageState extends State<ChatPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(
-                      userDetails.data != null
-                          ? userDetails.data!.company!.companyName! +
-                              " " +
-                              userDetails.data!.company!.contactPhone!
-                          : "",
-                      style: TextStyle(
-                          fontSize: height * 0.02, fontWeight: FontWeight.bold),
+                    SizedBox(
+                      width: width * 0.60,
+                      child: Text(
+                        userDetails.data != null
+                            ? userDetails.data!.company!.companyName! +
+                                " \n" +
+                                userDetails.data!.company!.contactPhone!
+                            : "",
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: TextStyle(
+                          // fontSize: width * 0.025,
+                          fontSize: kIsWeb ? width * 0.027 : width * 0.04,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                     Container(
-                      padding:
-                          EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
-                      height: 30,
+                      padding: EdgeInsets.all(width * 0.01),
+                      height: height * 0.05,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
                         color: Colors.pink[50],
@@ -260,7 +269,7 @@ class _ChatPageState extends State<ChatPage> {
                             child: Text(
                               "Add New",
                               style: TextStyle(
-                                  fontSize: height * 0.01,
+                                  fontSize: height * 0.025,
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
@@ -273,7 +282,8 @@ class _ChatPageState extends State<ChatPage> {
             ),
             SafeArea(
               child: Padding(
-                padding: EdgeInsets.only(top: 16, left: 16, right: 16),
+                padding: EdgeInsets.all(2),
+                // padding: EdgeInsets.only(top: 16, left: 16, right: 16),
                 child: TextField(
                   decoration: InputDecoration(
                     hintText: "Search...",
@@ -331,7 +341,7 @@ class _ChatPageState extends State<ChatPage> {
                 dynamic test = chatUsers![index].date!.toLocal();
                 return ConversationAPIList(
                   contact: chatUsers![index].contact,
-                  date: DateFormat('E, d MMM, yyyy h:mm a').format(test),
+                  date: DateFormat('E, d MMM, yyyy \n h:mm a').format(test),
                   firstName: chatUsers![index].firstName != null
                       ? chatUsers![index].firstName!
                       : '',

@@ -17,6 +17,7 @@
 //   }
 // }
 
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:sms/screens/homePage.dart';
 import 'package:sms/screens/login_screen.dart';
@@ -28,10 +29,12 @@ import '../services/notification.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  FCMPushNotifications().init();
+  if (!Platform.isWindows) {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    FCMPushNotifications().init();
+  }
 
 // await Firebase.initializeApp().then((value) => Get.put(AuthController()));
 
