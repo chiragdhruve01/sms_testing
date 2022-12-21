@@ -29,12 +29,12 @@ import '../services/notification.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (!Platform.isWindows) {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-    FCMPushNotifications().init();
-  }
+  // if (!Platform.isWindows) {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  FCMPushNotifications().init();
+  // }
 
 // await Firebase.initializeApp().then((value) => Get.put(AuthController()));
 
