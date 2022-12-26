@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Models/auth.dart';
-import 'successful_screen.dart';
+import '../extra/successful_screen.dart';
 
 class SignupScreen extends StatelessWidget {
   static const routeName = '/signup-screen';

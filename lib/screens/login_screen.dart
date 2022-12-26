@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sms/screens/login_screen2.dart';
+import 'package:sms/extra/login_screen2.dart';
 import 'package:sms/screens/signup_screen.dart';
 import '../models/auth.dart';
 // import 'successful_screen.dart';
-import 'package:sms/screens/successful_screen.dart';
+import 'package:sms/extra/successful_screen.dart';
 import 'package:flutter/gestures.dart';
 
 // import '../services/auth_service.dart';
