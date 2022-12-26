@@ -2,9 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sms/screens/login_screen2.dart';
+import 'package:sms/screens/signup_screen.dart';
 import '../models/auth.dart';
 // import 'successful_screen.dart';
 import 'package:sms/screens/successful_screen.dart';
+import 'package:flutter/gestures.dart';
 
 // import '../services/auth_service.dart';
 
@@ -211,13 +214,37 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 10),
                     Center(
-                      child: Text('Forgot password ?',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                          )),
+                      child: Text.rich(
+                        TextSpan(text: 'Forgot password ? \n', children: [
+                          TextSpan(
+                            text: 'Login ',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 15,
+                                color: Color(0xffEE7B23)),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LoginTestScreen())),
+                          ),
+                          TextSpan(
+                            text: 'Signup',
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SignupScreen())),
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xffEE7B23),
+                            ),
+                          ),
+                        ]),
+                      ),
                     ),
                     /*
                     SizedBox(height: 20),
