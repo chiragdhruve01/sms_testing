@@ -47,6 +47,7 @@ class _SplashState extends State<Splash> {
     newaccessToken = accessToken;
   }
 
+  @override
   void initState() {
     super.initState();
     checkToken();
@@ -65,10 +66,12 @@ class _SplashState extends State<Splash> {
             newtoken == "" ||
             newaccessToken == null ||
             newaccessToken == "") {
-          LoginScreen().launch(context);
-        } else {
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => HomePage()));
+              context, MaterialPageRoute(builder: (context) => LoginScreen()));
+          // LoginScreen().launch(context);
+        } else {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const HomePage()));
           // const HomeScreen(errMsg: '').launch(context);
           // Dashboard().launch(context);
         }
