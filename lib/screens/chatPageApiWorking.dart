@@ -209,14 +209,14 @@ class _ChatPageState extends State<ChatPage> {
                         maxLines: 2,
                         style: TextStyle(
                           // fontSize: width * 0.025,
-                          fontSize: kIsWeb ? width * 0.027 : width * 0.04,
+                          fontSize: kIsWeb ? width * 0.019 : width * 0.04,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     Container(
                       padding: EdgeInsets.all(width * 0.01),
-                      height: height * 0.05,
+                      // height: height * 0.05,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
                         color: Colors.pink[50],
@@ -269,8 +269,7 @@ class _ChatPageState extends State<ChatPage> {
                             child: Text(
                               "Add New",
                               style: TextStyle(
-                                  fontSize: width * 0.035,
-                                  fontWeight: FontWeight.bold),
+                                  fontSize: 15, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ],

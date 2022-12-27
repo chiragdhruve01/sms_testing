@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../screens/chatDetailPage.dart';
@@ -101,7 +102,7 @@ class _ConversationAPIList extends State<ConversationAPIList> {
                                   child: Text(
                                     widget.total!.toString(),
                                     style: TextStyle(
-                                      fontSize: width * 0.025,
+                                      fontSize: 11,
                                       color: Colors.white,
                                     ),
                                   ),
