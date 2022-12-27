@@ -79,29 +79,31 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         messages = data['chats'];
       });
 
-      Future.delayed(Duration.zero, () {
-        setState(() {
-          scroll.animateTo(
-            scroll.position.maxScrollExtent,
-            duration: const Duration(
-              milliseconds: 300,
-            ),
-            curve: Curves.easeOut,
-          );
-        });
-      });
+      // Future.delayed(Duration.zero, () {
+      //   setState(() {
+      //     scroll.animateTo(
+      //       scroll.position.maxScrollExtent,
+      //       duration: const Duration(
+      //         milliseconds: 300,
+      //       ),
+      //       curve: Curves.easeOut,
+      //     );
+      //   });
+      // });
 
-      // Timer(
-      //     _duration,
-      //     () => setState(() {
-      //           scroll.animateTo(
-      //             scroll.position.maxScrollExtent,
-      //             duration: const Duration(
-      //               milliseconds: 300,
-      //             ),
-      //             curve: Curves.easeOut,
-      //           );
-      //         }));
+      Timer(
+          const Duration(
+            seconds: 1,
+          ),
+          () => setState(() {
+                scroll.animateTo(
+                  scroll.position.maxScrollExtent + 200,
+                  duration: const Duration(
+                    milliseconds: 300,
+                  ),
+                  curve: Curves.easeOut,
+                );
+              }));
 
       // return data['chats'];
     } catch (e) {
