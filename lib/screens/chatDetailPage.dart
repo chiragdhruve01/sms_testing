@@ -217,27 +217,71 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   physics: const BouncingScrollPhysics(),
                   padding: const EdgeInsets.only(top: 10, bottom: 10),
                   itemBuilder: (context, index) {
-                    return Container(
-                      padding: const EdgeInsets.only(
-                          left: 14, right: 14, top: 10, bottom: 10),
-                      child: Align(
-                        alignment: (messages![index]['sender'] != null
-                            ? Alignment.topLeft
-                            : Alignment.topRight),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: (messages![index]['sender'] != null
-                                ? Colors.grey.shade200
-                                : Colors.blue[200]),
-                          ),
-                          padding: const EdgeInsets.all(16),
-                          child: Text(
-                            messages![index]['text'],
-                            style: const TextStyle(fontSize: 15),
+                    return Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(
+                              left: 14, right: 14, top: 10, bottom: 10),
+                          child: Row(
+                            mainAxisAlignment:
+                                messages![index]['sender'] != null
+                                    ? MainAxisAlignment.start
+                                    : MainAxisAlignment.end,
+                            children: [
+                              messages![index]['sender'] != null
+                                  ? CircleAvatar(
+                                      backgroundImage: messages![index]
+                                                  ['contact']['image'] !=
+                                              null
+                                          ? NetworkImage(
+                                              '${contants.urlLogin}' +
+                                                  messages![index]['contact']
+                                                      ['image'],
+                                            )
+                                          : AssetImage('assets/logo/logo.png')
+                                              as ImageProvider,
+                                      backgroundColor: Colors.transparent,
+                                      maxRadius: 20,
+                                    )
+                                  : Container(),
+                              Align(
+                                alignment: (messages![index]['sender'] != null
+                                    ? Alignment.topLeft
+                                    : Alignment.topRight),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: (messages![index]['sender'] != null
+                                        ? Colors.grey.shade200
+                                        : Colors.blue[200]),
+                                  ),
+                                  padding: const EdgeInsets.all(16),
+                                  child: Text(
+                                    messages![index]['text'],
+                                    style: const TextStyle(fontSize: 15),
+                                  ),
+                                ),
+                              ),
+                              messages![index]['sender'] == null
+                                  ? CircleAvatar(
+                                      backgroundImage: messages![index]
+                                                  ['contact']['image'] !=
+                                              null
+                                          ? NetworkImage(
+                                              '${contants.urlLogin}' +
+                                                  messages![index]['contact']
+                                                      ['image'],
+                                            )
+                                          : AssetImage('assets/logo/icon.png')
+                                              as ImageProvider,
+                                      backgroundColor: Colors.transparent,
+                                      maxRadius: 20,
+                                    )
+                                  : Container(),
+                            ],
                           ),
                         ),
-                      ),
+                      ],
                     );
                   },
                 ),
