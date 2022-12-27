@@ -178,6 +178,19 @@ class _LoginScreenState extends State<LoginScreen> {
                               borderRadius: BorderRadius.circular(10.0)),
                         ),
                         onPressed: () async {
+                          if (emailController.text.isEmpty ||
+                              passwordController.text.isEmpty) {
+                            emailController.text.isEmpty
+                                ? ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text('Email is Required'),
+                                        backgroundColor: Colors.red))
+                                : ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text('Password is Required'),
+                                        backgroundColor: Colors.red));
+                            return;
+                          }
                           var res = await authService.login(
                               emailController.text, passwordController.text);
                           // print("res" + res.toString());
