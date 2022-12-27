@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:sms/utils/constants.dart';
 
 import '../screens/chatDetailPage.dart';
 
@@ -64,8 +65,7 @@ class _ConversationAPIList extends State<ConversationAPIList> {
                 children: <Widget>[
                   CircleAvatar(
                     backgroundImage: widget.image != ""
-                        ? NetworkImage(
-                            "http://172.31.199.45:8000" + widget.image!)
+                        ? NetworkImage(urlLogin + widget.image!)
                         : NetworkImage(
                             'https://docs.flutter.dev/assets/images/dash/dash-fainting.gif'),
                     maxRadius: 30,
