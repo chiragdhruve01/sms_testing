@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import '../extra/login_screen2.dart';
 import 'login_screen.dart';
 import 'signup_screen.dart';
 
@@ -63,7 +65,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ),
               Expanded(
-                flex: 3,
+                flex: 10,
                 child: Column(
                   children: [
                     Container(
@@ -87,6 +89,58 @@ class WelcomeScreen extends StatelessWidget {
                             fontSize: 20,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 90,
+                      width: double.infinity,
+                      padding:
+                          const EdgeInsets.only(top: 25, left: 24, right: 24),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            elevation: 6.0,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 40.0, vertical: 20.0),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
+                            backgroundColor: Colors.indigo.shade800),
+                        onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (ctx) => SignupScreen())),
+                        child: Text(
+                          'Sign Up',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.lightBlue,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 90,
+                      width: double.infinity,
+                      padding:
+                          const EdgeInsets.only(top: 25, left: 24, right: 24),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            elevation: 6.0,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 40.0, vertical: 20.0),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
+                            backgroundColor: Colors.indigo.shade800),
+                        onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (ctx) => LoginTestScreen())),
+                        child: Text(
+                          'Login Screen',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.lightBlue,
                           ),
                         ),
                       ),

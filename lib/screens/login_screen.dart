@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sms/extra/login_screen2.dart';
+import 'package:sms/screens/chatPageApiWorking.dart';
 import 'package:sms/screens/signup_screen.dart';
 import '../models/auth.dart';
 // import 'successful_screen.dart';
@@ -11,15 +12,22 @@ import 'package:flutter/gestures.dart';
 
 // import '../services/auth_service.dart';
 
-class LoginScreen extends StatelessWidget {
-  final Auth authService = Auth();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+class LoginScreen extends StatefulWidget {
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
 
-  Widget login(IconData icon) {
+class _LoginScreenState extends State<LoginScreen> {
+  final Auth authService = Auth();
+
+  final emailController = TextEditingController();
+
+  final passwordController = TextEditingController();
+  var defaultponbool = true;
+  Widget login(IconData icon, String name, sad) {
     return Container(
       height: 50,
-      width: 115,
+      width: 165,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey.withOpacity(0.4), width: 1),
         borderRadius: BorderRadius.circular(12),
@@ -28,7 +36,13 @@ class LoginScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(icon, size: 24),
-          TextButton(onPressed: () {}, child: Text('Login')),
+          TextButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (ctx) => sad));
+              },
+              child: Text(name,
+                  style: TextStyle(color: Color.fromARGB(255, 19, 19, 19)))),
         ],
       ),
     );
@@ -46,10 +60,40 @@ class LoginScreen extends StatelessWidget {
         child: TextField(
           controller: userInput,
           autocorrect: false,
+          obscureText: hintTitle == 'Password' ? defaultponbool : false,
           enableSuggestions: false,
           autofocus: false,
-          decoration: InputDecoration.collapsed(
+          decoration: InputDecoration(
             hintText: hintTitle,
+            suffixIcon: hintTitle == 'Email'
+                ? Icon(
+                    Icons.email,
+                  )
+                : defaultponbool
+                    ? IconButton(
+                        splashColor: Colors.redAccent,
+                        splashRadius: 5.0,
+                        icon: Icon(
+                          Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            defaultponbool = false;
+                          });
+                        },
+                      )
+                    : IconButton(
+                        splashColor: Colors.orange,
+                        splashRadius: 5.0,
+                        icon: Icon(
+                          Icons.visibility,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            defaultponbool = true;
+                          });
+                        },
+                      ),
             hintStyle: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
@@ -87,7 +131,7 @@ class LoginScreen extends StatelessWidget {
         decoration: BoxDecoration(
           image: DecorationImage(
             alignment: Alignment.topCenter,
-            fit: BoxFit.fill,
+            fit: BoxFit.cover,
             image: NetworkImage(
               'https://images.unsplash.com/photo-1453306458620-5bbef13a5bca?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
             ),
@@ -109,19 +153,27 @@ class LoginScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(15.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: 250),
+                    SizedBox(height: 100),
+                    SizedBox(
+                      height: 100,
+                      child: Image.asset(
+                        'assets/logo/logo.png',
+                        fit: BoxFit.fill,
+                      ),
+                    ),
                     userInput(
                         emailController, 'Email', TextInputType.emailAddress),
                     userInput(passwordController, 'Password',
                         TextInputType.visiblePassword),
                     Container(
-                      height: 55,
+                      height: MediaQuery.of(context).size.height * .1,
                       padding:
                           const EdgeInsets.only(top: 5, left: 70, right: 70),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white.withOpacity(0.5),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0)),
                         ),
@@ -167,7 +219,7 @@ class LoginScreen extends StatelessWidget {
                                   backgroundColor: Colors.deepOrange,
                                 ));
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (ctx) => SuccessfulScreen()));
+                                    builder: (ctx) => ChatPage()));
                               }
                               break;
                             case 201:
@@ -209,57 +261,54 @@ class LoginScreen extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w700,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                         ),
                       ),
                     ),
+                    // Center(
+                    //   child: Text.rich(
+                    //     TextSpan(text: 'Forgot password ? \n', children: [
+                    //       TextSpan(
+                    //         text: 'Login ',
+                    //         style: TextStyle(
+                    //             fontWeight: FontWeight.w700,
+                    //             fontSize: 15,
+                    //             color: Color(0xffEE7B23)),
+                    //         recognizer: TapGestureRecognizer()
+                    //           ..onTap = () => Navigator.push(
+                    //               context,
+                    //               MaterialPageRoute(
+                    //                   builder: (context) => LoginTestScreen())),
+                    //       ),
+                    //       TextSpan(
+                    //         text: 'Signup',
+                    //         recognizer: TapGestureRecognizer()
+                    //           ..onTap = () => Navigator.push(
+                    //               context,
+                    //               MaterialPageRoute(
+                    //                   builder: (context) => SignupScreen())),
+                    //         style: TextStyle(
+                    //           fontSize: 15,
+                    //           fontWeight: FontWeight.w700,
+                    //           color: Color(0xffEE7B23),
+                    //         ),
+                    //       ),
+                    //     ]),
+                    //   ),
+                    // ),
                     SizedBox(height: 10),
-                    Center(
-                      child: Text.rich(
-                        TextSpan(text: 'Forgot password ? \n', children: [
-                          TextSpan(
-                            text: 'Login ',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 15,
-                                color: Color(0xffEE7B23)),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => LoginTestScreen())),
-                          ),
-                          TextSpan(
-                            text: 'Signup',
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => SignupScreen())),
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xffEE7B23),
-                            ),
-                          ),
-                        ]),
-                      ),
-                    ),
-                    /*
-                    SizedBox(height: 20),
                     Padding(
                       padding: const EdgeInsets.only(top: 25.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          login(Icons.add),
-                          login(Icons.book_online),
+                          login(Icons.add, 'Sign Up', SignupScreen()),
+                          login(Icons.book_online, 'Forget Password', Second()),
                         ],
                       ),
                     ),
-                    Divider(thickness: 0, color: Colors.white),
-                  */
+                    // Divider(thickness: 0, color: Colors.white),
                   ],
                 ),
               ),
