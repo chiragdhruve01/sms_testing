@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sms/extra/login_screen2.dart';
 import 'package:sms/screens/chatPageApiWorking.dart';
+import 'package:sms/screens/homePage.dart';
 import 'package:sms/screens/signup_screen.dart';
 import '../models/auth.dart';
 // import 'successful_screen.dart';
@@ -232,7 +233,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   backgroundColor: Colors.deepOrange,
                                 ));
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (ctx) => ChatPage()));
+                                    builder: (ctx) => HomePage()));
                               }
                               break;
                             case 201:
