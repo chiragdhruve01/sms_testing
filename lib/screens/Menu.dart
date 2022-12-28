@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:sms/screens/login_screen.dart';
 import 'package:sms/screens/screen_notification_1.dart';
+import 'package:sms/screens/welcome_screen.dart';
 
 class SMSMenu extends StatefulWidget {
   static var tag = "/SMSMenu";
@@ -18,9 +19,9 @@ class _SMSMenuState extends State<SMSMenu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          backgroundColor: Color(0x44000000),
-          leading: BackButton(color: Colors.black)),
+      // appBar: AppBar(
+      //     backgroundColor: Color(0x44000000),
+      //     leading: BackButton(color: Colors.black)),
       body: Container(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(16),
@@ -28,8 +29,11 @@ class _SMSMenuState extends State<SMSMenu> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               10.height,
-              Text("Profile", style: boldTextStyle(size: 32)),
-              16.height,
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0, bottom: 0),
+                child: Text("Profile", style: boldTextStyle(size: 32)),
+              ),
+              10.height,
               Container(
                 padding: EdgeInsets.all(8),
                 decoration: boxDecorationWithShadow(
@@ -149,6 +153,31 @@ class _SMSMenuState extends State<SMSMenu> {
                                 ),
                               ),
                             );
+                    }),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
+                      child: Row(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Image.asset('assets/logo/two.jpg',
+                                  // color: Color(0xFFE7586A),
+                                  height: 20,
+                                  width: 20),
+                              16.width,
+                              Text("Extra Login / Signup Screen",
+                                  style: primaryTextStyle()),
+                            ],
+                          ).expand(),
+                          Icon(Icons.keyboard_arrow_right, color: Colors.black),
+                        ],
+                      ),
+                    ).onTap(() {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WelcomeScreen()),
+                      );
                     }),
                   ],
                 ),

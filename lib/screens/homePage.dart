@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   var pages = [
     ChatPage(),
     SMSMenu(),
-    WelcomeScreen(),
+    // WelcomeScreen(),
     // ChatDetailPage(),
   ];
 
@@ -109,10 +109,10 @@ class _HomePageState extends State<HomePage> {
                 icon: Icon(Icons.message),
                 label: "Chats",
               ),
-              const BottomNavigationBarItem(
-                icon: Icon(Icons.group_work),
-                label: "Channels",
-              ),
+              // const BottomNavigationBarItem(
+              //   icon: Icon(Icons.group_work),
+              //   label: "Channels",
+              // ),
               const BottomNavigationBarItem(
                 icon: Icon(Icons.account_box),
                 label: "Profile",

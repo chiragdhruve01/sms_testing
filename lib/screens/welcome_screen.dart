@@ -27,6 +27,9 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          backgroundColor: Color(0x44000000),
+          leading: BackButton(color: Colors.black)),
       body: Stack(
         children: [
           Container(
