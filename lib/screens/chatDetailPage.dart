@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sms/screens/chatPageApiWorking.dart';
 import 'package:sms/utils/constants.dart';
@@ -217,11 +218,17 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   physics: const BouncingScrollPhysics(),
                   padding: const EdgeInsets.only(top: 10, bottom: 10),
                   itemBuilder: (context, index) {
+                    var date = DateTime.parse(messages![index]['created_at']);
+                    var formattedDate =
+                        DateFormat('E, d MMM h:mm a').format(date);
                     return Column(
                       children: [
                         Container(
-                          padding: const EdgeInsets.only(
-                              left: 14, right: 14, top: 10, bottom: 10),
+                          padding: messages![index]['sender'] != null
+                              ? const EdgeInsets.only(
+                                  left: 14, right: 50, top: 10, bottom: 10)
+                              : const EdgeInsets.only(
+                                  left: 50, right: 14, top: 10, bottom: 10),
                           child: Row(
                             mainAxisAlignment:
                                 messages![index]['sender'] != null
@@ -247,24 +254,142 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                                       maxRadius: 20,
                                     )
                                   : Container(),
-                              Align(
-                                alignment: (messages![index]['sender'] != null
-                                    ? Alignment.topLeft
-                                    : Alignment.topRight),
+                              Flexible(
                                 child: Container(
+                                  padding: EdgeInsets.all(14),
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
                                     color: (messages![index]['sender'] != null
                                         ? Colors.grey.shade200
                                         : Colors.blue[200]),
+                                    borderRadius: messages![index]['sender'] !=
+                                            null
+                                        ? BorderRadius.only(
+                                            topRight: Radius.circular(18.0),
+                                            bottomLeft: Radius.circular(18.0),
+                                            bottomRight: Radius.circular(18.0),
+                                          )
+                                        : BorderRadius.only(
+                                            topLeft: Radius.circular(18),
+                                            bottomLeft: Radius.circular(18),
+                                            bottomRight: Radius.circular(18),
+                                          ),
                                   ),
-                                  padding: const EdgeInsets.all(16),
-                                  child: Text(
-                                    messages![index]['text'],
-                                    style: const TextStyle(fontSize: 15),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Text(
+                                        messages![index]['id'].toString(),
+                                        style: TextStyle(
+                                          // color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                      Text(
+                                        messages![index]['text'],
+                                        style: TextStyle(
+                                          // color: Colors.white,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Text(
+                                            formattedDate,
+                                            style: TextStyle(
+                                              // color: Colors.green,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
+                              // Align(
+                              //   alignment: (messages![index]['sender'] != null
+                              //       ? Alignment.topLeft
+                              //       : Alignment.topRight),
+                              //   child: Container(
+                              //     decoration: BoxDecoration(
+                              //       borderRadius: BorderRadius.circular(20),
+                              //       color: (messages![index]['sender'] != null
+                              //           ? Colors.grey.shade200
+                              //           : Colors.blue[200]),
+                              //     ),
+                              //     padding: const EdgeInsets.all(16),
+                              //     child: Text(
+                              //       messages![index]['text'],
+                              //       style: const TextStyle(fontSize: 15),
+                              //     ),
+                              //   ),
+                              // ),
+                              // Align(
+                              //   alignment: (messages![index]['sender'] != null
+                              //       ? Alignment.topLeft
+                              //       : Alignment.topRight),
+                              //   child: Container(
+                              //       decoration: BoxDecoration(
+                              //         borderRadius: BorderRadius.circular(20),
+                              //         color: (messages![index]['sender'] != null
+                              //             ? Colors.grey.shade200
+                              //             : Colors.blue[200]),
+                              //       ),
+                              //       padding: const EdgeInsets.all(16),
+                              //       child: Column(
+                              //         mainAxisAlignment:
+                              //             MainAxisAlignment.start,
+                              //         crossAxisAlignment:
+                              //             CrossAxisAlignment.start,
+                              //         mainAxisSize: MainAxisSize.max,
+                              //         children: [
+                              //           Text(
+                              //             messages![index]['id'].toString(),
+                              //             style: TextStyle(
+                              //               color: Colors.black,
+                              //               fontWeight: FontWeight.bold,
+                              //               fontSize: 15,
+                              //             ),
+                              //           ),
+                              //           Text(
+                              //             messages![index]['text'],
+                              //             style: TextStyle(
+                              //               color: Colors.white,
+                              //               fontWeight: FontWeight.w400,
+                              //               fontSize: 15,
+                              //             ),
+                              //           ),
+                              //           Row(
+                              //             mainAxisAlignment:
+                              //                 MainAxisAlignment.end,
+                              //             crossAxisAlignment:
+                              //                 CrossAxisAlignment.end,
+                              //             mainAxisSize: MainAxisSize.max,
+                              //             children: [
+                              //               Text(
+                              //                 messages![index]['created_at'],
+                              //                 style: TextStyle(
+                              //                   color: Colors.green,
+                              //                   fontWeight: FontWeight.w500,
+                              //                   fontSize: 15,
+                              //                 ),
+                              //               ),
+                              //             ],
+                              //           ),
+                              //         ],
+                              //       )),
+                              // ),
                               messages![index]['sender'] == null
                                   ? CircleAvatar(
                                       backgroundImage: messages![index]
