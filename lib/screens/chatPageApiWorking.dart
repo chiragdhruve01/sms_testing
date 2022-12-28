@@ -37,11 +37,15 @@ class _ChatPageState extends State<ChatPage> {
     // countuser = getEmployeeList();
     getEmployeeList();
     websocket();
+    // getDeviceToken();
+  }
+
+  getDeviceToken() async {
+    String? deviceToken = await FCMPushNotifications().getDeviceToken();
+    print("deviceToken" + deviceToken.toString());
   }
 
   websocket() async {
-    String? deviceToken = await FCMPushNotifications().getDeviceToken();
-    print("deviceToken" + deviceToken.toString());
     _channel.stream.listen((message) {
       print("message" + message);
       getEmployeeList();

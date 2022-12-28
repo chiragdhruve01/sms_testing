@@ -6,8 +6,9 @@ const kPrimaryColor = Color(0xFF2D5D70);
 const kSecondaryColor = Color(0xFF265DAB);
 // TODO Implement this library.
 const urlAuth = "hello";
-const urlLogin = "http://172.31.199.45:8000";
-const urlLogindomain  = "172.31.199.45:8000";
+const localurlLogin = "http://172.31.199.45:8000";
+const urlLogin = "https://messaging.care";
+const urlLogindomain = "messaging.care";
 
 // const urlLogin = "http://10.0.2.2:8000";
 // const urlLogin = "http://localhost:8000";
@@ -19,7 +20,7 @@ const superAdminMsg = "/superAdminMsg/";
 const accTokenuser = "/user/getUserAppDetails/";
 const usergetroommsg = "/getRoomChats/";
 const websocket = "/getRoomChats/";
-const wsprotocol = "ws";
-const wsdomain = "172.31.199.45:8000";
+const wsprotocol = "wss";
+const wsdomain = "messaging.care";
 const wsurlchat = "/ws/chat/";
 const wsurlnotify = "/ws/notify/";
