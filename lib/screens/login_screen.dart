@@ -153,10 +153,12 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  // mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: 100),
+                    MediaQuery.of(context).orientation == Orientation.portrait
+                        ? SizedBox(height: 210)
+                        : SizedBox(height: 0),
                     SizedBox(
                       height: 100,
                       child: Image.asset(
