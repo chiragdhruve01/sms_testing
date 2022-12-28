@@ -87,13 +87,13 @@ class _HomePageState extends State<HomePage> {
     return WillPopScope(
         onWillPop: showExitPopup, //call function on back button press
         child: Scaffold(
-          // body: Container(
-          //   child: const Center(child: Text("Chats")),
-          // ),
           // body: Center(
           //   child: pages[selectedIndex],
           // ),
-          body: pages[selectedIndex],
+          body: IndexedStack(
+            index: selectedIndex,
+            children: pages,
+          ),
           bottomNavigationBar: BottomNavigationBar(
             selectedItemColor: Colors.red,
             backgroundColor: Color.fromARGB(255, 221, 195, 203),
