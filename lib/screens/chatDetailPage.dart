@@ -317,10 +317,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                                   ),
                                 ),
                               ),
-                              // Align(
-                              //   alignment: (messages![index]['sender'] != null
-                              //       ? Alignment.topLeft
-                              //       : Alignment.topRight),
+                              // Expanded(
                               //   child: Container(
                               //     decoration: BoxDecoration(
                               //       borderRadius: BorderRadius.circular(20),
@@ -329,66 +326,48 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                               //           : Colors.blue[200]),
                               //     ),
                               //     padding: const EdgeInsets.all(16),
-                              //     child: Text(
-                              //       messages![index]['text'],
-                              //       style: const TextStyle(fontSize: 15),
+                              //     child: Column(
+                              //       mainAxisAlignment: MainAxisAlignment.start,
+                              //       crossAxisAlignment:
+                              //           CrossAxisAlignment.start,
+                              //       mainAxisSize: MainAxisSize.max,
+                              //       children: [
+                              //         Text(
+                              //           messages![index]['id'].toString(),
+                              //           style: TextStyle(
+                              //             color: Colors.black,
+                              //             fontWeight: FontWeight.bold,
+                              //             fontSize: 15,
+                              //           ),
+                              //         ),
+                              //         Text(
+                              //           messages![index]['text'],
+                              //           style: TextStyle(
+                              //             color: Colors.white,
+                              //             fontWeight: FontWeight.w400,
+                              //             fontSize: 15,
+                              //           ),
+                              //         ),
+                              //         Row(
+                              //           mainAxisAlignment:
+                              //               MainAxisAlignment.end,
+                              //           crossAxisAlignment:
+                              //               CrossAxisAlignment.end,
+                              //           mainAxisSize: MainAxisSize.max,
+                              //           children: [
+                              //             Text(
+                              //               messages![index]['created_at'],
+                              //               style: TextStyle(
+                              //                 color: Colors.green,
+                              //                 fontWeight: FontWeight.w500,
+                              //                 fontSize: 15,
+                              //               ),
+                              //             ),
+                              //           ],
+                              //         ),
+                              //       ],
                               //     ),
                               //   ),
-                              // ),
-                              // Align(
-                              //   alignment: (messages![index]['sender'] != null
-                              //       ? Alignment.topLeft
-                              //       : Alignment.topRight),
-                              //   child: Container(
-                              //       decoration: BoxDecoration(
-                              //         borderRadius: BorderRadius.circular(20),
-                              //         color: (messages![index]['sender'] != null
-                              //             ? Colors.grey.shade200
-                              //             : Colors.blue[200]),
-                              //       ),
-                              //       padding: const EdgeInsets.all(16),
-                              //       child: Column(
-                              //         mainAxisAlignment:
-                              //             MainAxisAlignment.start,
-                              //         crossAxisAlignment:
-                              //             CrossAxisAlignment.start,
-                              //         mainAxisSize: MainAxisSize.max,
-                              //         children: [
-                              //           Text(
-                              //             messages![index]['id'].toString(),
-                              //             style: TextStyle(
-                              //               color: Colors.black,
-                              //               fontWeight: FontWeight.bold,
-                              //               fontSize: 15,
-                              //             ),
-                              //           ),
-                              //           Text(
-                              //             messages![index]['text'],
-                              //             style: TextStyle(
-                              //               color: Colors.white,
-                              //               fontWeight: FontWeight.w400,
-                              //               fontSize: 15,
-                              //             ),
-                              //           ),
-                              //           Row(
-                              //             mainAxisAlignment:
-                              //                 MainAxisAlignment.end,
-                              //             crossAxisAlignment:
-                              //                 CrossAxisAlignment.end,
-                              //             mainAxisSize: MainAxisSize.max,
-                              //             children: [
-                              //               Text(
-                              //                 messages![index]['created_at'],
-                              //                 style: TextStyle(
-                              //                   color: Colors.green,
-                              //                   fontWeight: FontWeight.w500,
-                              //                   fontSize: 15,
-                              //                 ),
-                              //               ),
-                              //             ],
-                              //           ),
-                              //         ],
-                              //       )),
                               // ),
                               messages![index]['sender'] == null
                                   ? CircleAvatar(
