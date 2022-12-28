@@ -23,6 +23,7 @@ class ChatDetailPage extends StatefulWidget {
 class _ChatDetailPageState extends State<ChatDetailPage> {
   List<dynamic>? messages = [];
   final ScrollController scroll = ScrollController();
+  bool showbtn = false;
 
   // late Map<String, dynamic> answer;
   _scrollToEnd() {
@@ -55,6 +56,16 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         backgroundColor: Colors.deepOrange,
       ));
     }
+    scroll.addListener(() {
+      double showoffset = 10.0;
+      if (scroll.offset > showoffset) {
+        showbtn = true;
+        setState(() {});
+      } else {
+        showbtn = false;
+        setState(() {});
+      }
+    });
   }
 
   Future<String> getAccessToken() async {
@@ -205,6 +216,28 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                 ),
               ],
             ),
+          ),
+        ),
+      ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+      floatingActionButton: Container(
+        alignment: Alignment.bottomLeft,
+        padding: const EdgeInsets.only(bottom: 60.0, left: 15),
+        child: AnimatedOpacity(
+          duration: const Duration(milliseconds: 1000), //show/hide animation
+          opacity: showbtn ? 0.2 : 0.0, //set obacity to 1 on visible, or hide
+          child: FloatingActionButton(
+            mini: true,
+            tooltip: 'Scroll to top',
+            onPressed: () {
+              scroll.animateTo(0,
+                  duration:
+                      const Duration(milliseconds: 500), //duration of scroll
+                  curve: Curves.fastOutSlowIn //scroll type
+                  );
+            },
+            child: const Icon(Icons.arrow_upward),
+            // backgroundColor: Colors.blue.shade100,
           ),
         ),
       ),
