@@ -459,3 +459,30 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     );
   }
 }
+
+// CustomPaint(
+//     painter: MessageBubble(
+//     Colors.green,
+//     ),
+//     )
+
+class MessageBubble extends CustomPainter {
+  final Color bgColor;
+  MessageBubble(this.bgColor);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint = Paint()..color = bgColor;
+
+    var path = Path();
+    path.lineTo(-10, 0);
+    path.lineTo(0, 15);
+    path.lineTo(10, 0);
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
+}
