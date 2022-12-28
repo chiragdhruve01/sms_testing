@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'dart:async';
 import 'dart:convert';
 // ignore: unused_import
@@ -7,9 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sms/screens/chatPageApiWorking.dart';
 import 'package:sms/utils/constants.dart';
-import '../models/chatmessagemodel.dart';
 import 'package:sms/utils/constants.dart' as contants;
 
 class ChatDetailPage extends StatefulWidget {
@@ -17,6 +16,7 @@ class ChatDetailPage extends StatefulWidget {
   final String room;
 
   @override
+  // ignore: library_private_types_in_public_api, no_logic_in_create_state
   _ChatDetailPageState createState() => _ChatDetailPageState(room: room);
 }
 
@@ -39,18 +39,18 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   @override
   void initState() {
-    getRoomUserMessages(this.room);
+    getRoomUserMessages(room);
     super.initState();
-    if (this.room.isNotEmpty) {
+    if (room.isNotEmpty) {
       Future.delayed(Duration.zero, () {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           duration: Duration(seconds: 1),
           content: Text("Welcome"),
           backgroundColor: Colors.deepOrange,
         ));
       });
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("No Data Found"),
         backgroundColor: Colors.deepOrange,
       ));
@@ -59,6 +59,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   Future<String> getAccessToken() async {
     final prefs = await SharedPreferences.getInstance();
+    // ignore: non_constant_identifier_names
     bool CheckValue = prefs.containsKey('accessToken');
     var accessToken = "";
     if (CheckValue == true) {
@@ -70,6 +71,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   Future<void> getRoomUserMessages(room) async {
     try {
       String accessToken = await getAccessToken();
+      // ignore: unnecessary_brace_in_string_interps
       final url = Uri.http(urlLogindomain, '${usergetroommsg}${room}');
       final response = await http
           .get(url, headers: {'Authorization': 'Bearer $accessToken'});
@@ -146,10 +148,10 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   backgroundImage: messages!.isNotEmpty &&
                           messages![0]['contact']['image'] != null
                       ? NetworkImage(
-                          '${contants.urlLogin}' +
-                              messages![0]['contact']['image'],
+                          contants.urlLogin + messages![0]['contact']['image'],
                         )
-                      : AssetImage('assets/logo/two.jpg') as ImageProvider,
+                      : const AssetImage('assets/logo/two.jpg')
+                          as ImageProvider,
                   // backgroundImage: NetworkImage((messages!.isNotEmpty &&
                   //         messages![0]['contact']['image'] != null)
                   //     ? '${contants.urlLogin}' +
@@ -180,17 +182,17 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                         //         ? "receiver not null"
                         //         : "receiver null"
                         //     : "is empty",
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w600),
                       ),
-                      const SizedBox(
-                        height: 6,
-                      ),
-                      Text(
-                        "Online",
-                        style: TextStyle(
-                            color: Colors.grey.shade600, fontSize: 13),
-                      ),
+                      // const SizedBox(
+                      //   height: 6,
+                      // ),
+                      // Text(
+                      //   "Online",
+                      //   style: TextStyle(
+                      //       color: Colors.grey.shade600, fontSize: 13),
+                      // ),
                     ],
                   ),
                 ),
@@ -199,7 +201,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   onPressed: () {
                     _scrollToEnd();
                   },
-                  icon: Icon(Icons.settings),
+                  icon: const Icon(Icons.settings),
                 ),
               ],
             ),
@@ -244,11 +246,12 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                                                       ['image'] !=
                                                   null
                                           ? NetworkImage(
-                                              '${contants.urlLogin}' +
+                                              contants.urlLogin +
                                                   messages![index]['sender']
                                                       ['image'],
                                             )
-                                          : AssetImage('assets/logo/logo.png')
+                                          : const AssetImage(
+                                                  'assets/logo/logo.png')
                                               as ImageProvider,
                                       backgroundColor: Colors.transparent,
                                       maxRadius: 20,
@@ -256,19 +259,19 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                                   : Container(),
                               Flexible(
                                 child: Container(
-                                  padding: EdgeInsets.all(14),
+                                  padding: const EdgeInsets.all(14),
                                   decoration: BoxDecoration(
                                     color: (messages![index]['sender'] != null
                                         ? Colors.grey.shade200
                                         : Colors.blue[200]),
                                     borderRadius: messages![index]['sender'] !=
                                             null
-                                        ? BorderRadius.only(
+                                        ? const BorderRadius.only(
                                             topRight: Radius.circular(18.0),
                                             bottomLeft: Radius.circular(18.0),
                                             bottomRight: Radius.circular(18.0),
                                           )
-                                        : BorderRadius.only(
+                                        : const BorderRadius.only(
                                             topLeft: Radius.circular(18),
                                             bottomLeft: Radius.circular(18),
                                             bottomRight: Radius.circular(18),
@@ -282,16 +285,14 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                                     children: [
                                       Text(
                                         messages![index]['id'].toString(),
-                                        style: TextStyle(
-                                          // color: Colors.black,
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 15,
                                         ),
                                       ),
                                       Text(
                                         messages![index]['text'],
-                                        style: TextStyle(
-                                          // color: Colors.white,
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 15,
                                         ),
@@ -305,7 +306,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                                         children: [
                                           Text(
                                             formattedDate,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               // color: Colors.green,
                                               fontWeight: FontWeight.w500,
                                               fontSize: 15,
@@ -378,11 +379,12 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                                                       ['image'] !=
                                                   null
                                           ? NetworkImage(
-                                              '${contants.urlLogin}' +
+                                              contants.urlLogin +
                                                   messages![index]['contact']
                                                       ['image'],
                                             )
-                                          : AssetImage('assets/logo/icon.png')
+                                          : const AssetImage(
+                                                  'assets/logo/icon.png')
                                               as ImageProvider,
                                       backgroundColor: Colors.transparent,
                                       maxRadius: 20,
