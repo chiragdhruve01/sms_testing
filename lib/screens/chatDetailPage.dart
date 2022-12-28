@@ -231,11 +231,14 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                               messages![index]['sender'] != null
                                   ? CircleAvatar(
                                       backgroundImage: messages![index]
-                                                  ['contact']['image'] !=
-                                              null
+                                                      ['sender']
+                                                  .isNotEmpty &&
+                                              messages![index]['sender']
+                                                      ['image'] !=
+                                                  null
                                           ? NetworkImage(
                                               '${contants.urlLogin}' +
-                                                  messages![index]['contact']
+                                                  messages![index]['sender']
                                                       ['image'],
                                             )
                                           : AssetImage('assets/logo/logo.png')
@@ -265,8 +268,11 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                               messages![index]['sender'] == null
                                   ? CircleAvatar(
                                       backgroundImage: messages![index]
-                                                  ['contact']['image'] !=
-                                              null
+                                                      ['contact']
+                                                  .isNotEmpty &&
+                                              messages![index]['contact']
+                                                      ['image'] !=
+                                                  null
                                           ? NetworkImage(
                                               '${contants.urlLogin}' +
                                                   messages![index]['contact']
