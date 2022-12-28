@@ -5,6 +5,7 @@ import 'dart:convert';
 // import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sms/screens/chatDetailPage.dart';
 import 'package:sms/services/auth_service.dart';
 import 'package:sms/utils/constants.dart';
 import 'package:intl/intl.dart';
@@ -48,6 +49,11 @@ class _ChatPageState extends State<ChatPage> {
   websocket() async {
     _channel.stream.listen((message) {
       print("message" + message);
+      // var msg = jsonDecode(message);
+      // print("message" + jsonDecode(message));
+      // print("msg" + msg.toString());
+      // print("room" + msg['room']);
+      // ChatDetailPage(room: msg['room']);
       getEmployeeList();
     });
   }
@@ -100,84 +106,11 @@ class _ChatPageState extends State<ChatPage> {
     });
   }
 
-  // List<dynamic> chatUsers = [
-  //   {
-  //     "name": "Jane Russel",
-  //     "messageText": "Awesome Setup",
-  //     "imageURL": "",
-  //     "time": "Now"
-  //   },
-  //   {
-  //     "name": "maniel Russel",
-  //     "messageText": "Awesome Setup",
-  //     "imageURL": "",
-  //     "time": "Now"
-  //   },
-  //   // {
-  //   //   "name": "donald Russel",
-  //   //   "messageText": "Awesome Setup",
-  //   //   "imageURL":
-  //   //       "https://img.freepik.com/premium-photo/astronaut-outer-open-space-planet-earth-stars-provide-background-erforming-space-planet-earth-sunrise-sunset-our-home-iss-elements-this-image-furnished-by-nasa_150455-16829.jpg",
-  //   //   "time": "Now"
-  //   // }
-  // ];
-
-  // List<ChatUsers> chatUsers = [
-  //   ChatUsers(
-  //       name: "Jane Russel",
-  //       messageText: "Awesome Setup",
-  //       imageURL: "",
-  //       time: "Now"),
-  //   ChatUsers(
-  //       name: "Glady's Murphy",
-  //       messageText: "That's Great",
-  //       imageURL: "",
-  //       time: "Yesterday"),
-  //   ChatUsers(
-  //       name: "Jorge Henry",
-  //       messageText: "Hey where are you?",
-  //       imageURL:
-  //           "https://img.freepik.com/premium-photo/astronaut-outer-open-space-planet-earth-stars-provide-background-erforming-space-planet-earth-sunrise-sunset-our-home-iss-elements-this-image-furnished-by-nasa_150455-16829.jpg",
-  //       time: "31 Mar"),
-  //   ChatUsers(
-  //       name: "Philip Fox",
-  //       messageText: "Busy! Call me in 20 mins",
-  //       imageURL:
-  //           "https://img.freepik.com/premium-photo/astronaut-outer-open-space-planet-earth-stars-provide-background-erforming-space-planet-earth-sunrise-sunset-our-home-iss-elements-this-image-furnished-by-nasa_150455-16829.jpg",
-  //       time: "28 Mar"),
-  //   ChatUsers(
-  //       name: "Debra Hawkins",
-  //       messageText: "Thankyou, It's awesome",
-  //       imageURL:
-  //           "https://img.freepik.com/premium-photo/astronaut-outer-open-space-planet-earth-stars-provide-background-erforming-space-planet-earth-sunrise-sunset-our-home-iss-elements-this-image-furnished-by-nasa_150455-16829.jpg",
-  //       time: "23 Mar"),
-  //   ChatUsers(
-  //       name: "Jacob Pena",
-  //       messageText: "will update you in evening",
-  //       imageURL:
-  //           "https://img.freepik.com/premium-photo/astronaut-outer-open-space-planet-earth-stars-provide-background-erforming-space-planet-earth-sunrise-sunset-our-home-iss-elements-this-image-furnished-by-nasa_150455-16829.jpg",
-  //       time: "17 Mar"),
-  //   ChatUsers(
-  //       name: "Andrey Jones",
-  //       messageText: "Can you please share the file?",
-  //       imageURL:
-  //           "https://img.freepik.com/premium-photo/astronaut-outer-open-space-planet-earth-stars-provide-background-erforming-space-planet-earth-sunrise-sunset-our-home-iss-elements-this-image-furnished-by-nasa_150455-16829.jpg",
-  //       time: "24 Feb"),
-  //   ChatUsers(
-  //       name: "John Wick",
-  //       messageText: "How are you?",
-  //       imageURL:
-  //           "https://img.freepik.com/premium-photo/astronaut-outer-open-space-planet-earth-stars-provide-background-erforming-space-planet-earth-sunrise-sunset-our-home-iss-elements-this-image-furnished-by-nasa_150455-16829.jpg",
-  //       time: "18 Feb"),
-  // ];
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
-      // body: SingleChildScrollView(
-      //   child: Center(child: Text("Chat")),
-      // ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Column(

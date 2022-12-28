@@ -227,6 +227,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           duration: const Duration(milliseconds: 1000), //show/hide animation
           opacity: showbtn ? 0.2 : 0.0, //set obacity to 1 on visible, or hide
           child: FloatingActionButton(
+            heroTag: null,
             mini: true,
             tooltip: 'Scroll to top',
             onPressed: () {
