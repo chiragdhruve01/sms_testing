@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 // import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sms/screens/chatDetailPage.dart';
 import 'package:sms/services/auth_service.dart';
 import 'package:sms/utils/constants.dart';
 import 'package:intl/intl.dart';
@@ -64,29 +62,9 @@ class _ChatPageState extends State<ChatPage> {
     super.dispose();
   }
 
-  Future<String> getPrefs() async {
-    final prefs = await SharedPreferences.getInstance();
-    bool CheckValue = prefs.containsKey('token');
-    var token = "";
-    if (CheckValue == true) {
-      token = prefs.getString('token')!;
-    }
-    return token;
-  }
-
-  Future<String> getAccessToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    bool CheckValue = prefs.containsKey('accessToken');
-    var accessToken = "";
-    if (CheckValue == true) {
-      accessToken = prefs.getString('accessToken')!;
-    }
-    return accessToken;
-  }
-
   getEmployeeList() async {
-    String token = await getPrefs();
-    String accessToken = await getAccessToken();
+    String token = await authService.getPrefs();
+    String accessToken = await authService.getAccessToken();
     dynamic url;
     user = await authService.getUserDetails(token);
     userDetails = UserDetails.fromJson(user);

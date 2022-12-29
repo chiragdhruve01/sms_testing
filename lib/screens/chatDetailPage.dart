@@ -7,9 +7,8 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sms/utils/constants.dart';
 import 'package:sms/utils/constants.dart' as contants;
+import '../services/auth_service.dart';
 
 class ChatDetailPage extends StatefulWidget {
   const ChatDetailPage({Key? key, required this.room}) : super(key: key);
@@ -24,6 +23,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   List<dynamic>? messages = [];
   final ScrollController scroll = ScrollController();
   bool showbtn = false;
+  AuthService authservice = AuthService();
 
   // late Map<String, dynamic> answer;
   _scrollToEnd() {
@@ -68,22 +68,12 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     });
   }
 
-  Future<String> getAccessToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    // ignore: non_constant_identifier_names
-    bool CheckValue = prefs.containsKey('accessToken');
-    var accessToken = "";
-    if (CheckValue == true) {
-      accessToken = prefs.getString('accessToken')!;
-    }
-    return accessToken;
-  }
-
   Future<void> getRoomUserMessages(room) async {
     try {
-      String accessToken = await getAccessToken();
+      String accessToken = await authservice.getAccessToken();
       // ignore: unnecessary_brace_in_string_interps
-      final url = Uri.http(urlLogindomain, '${usergetroommsg}${room}');
+      final url = Uri.http(
+          contants.urlLogindomain, '${contants.usergetroommsg}${room}');
       final response = await http
           .get(url, headers: {'Authorization': 'Bearer $accessToken'});
       var data = jsonDecode(response.body);

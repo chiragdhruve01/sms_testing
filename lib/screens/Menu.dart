@@ -1,9 +1,14 @@
 // import 'package:banking_prokit/main.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:sms/screens/login_screen.dart';
 import 'package:sms/screens/screen_notification_1.dart';
 import 'package:sms/screens/welcome_screen.dart';
+import 'package:sms/utils/constants.dart' as contants;
+import '../models/chat.dart';
+import '../services/auth_service.dart';
 
 class SMSMenu extends StatefulWidget {
   static var tag = "/SMSMenu";
@@ -15,6 +20,30 @@ class SMSMenu extends StatefulWidget {
 class _SMSMenuState extends State<SMSMenu> {
   get height => MediaQuery.of(context).size.height;
   get width => MediaQuery.of(context).size.width;
+  dynamic user;
+
+  static UserDetails userData = UserDetails();
+
+  AuthService authservice = AuthService();
+
+  @override
+  void initState() {
+    super.initState();
+    getuserDetails();
+  }
+
+  Future<void> getuserDetails() async {
+    try {
+      String token = await authservice.getPrefs();
+      String accessToken = await authservice.getAccessToken();
+      dynamic url;
+      user = await authservice.getUserDetails(token);
+      userData = UserDetails.fromJson(user);
+      setState(() {});
+    } catch (e) {
+      return Future.error(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +53,7 @@ class _SMSMenuState extends State<SMSMenu> {
       //     leading: BackButton(color: Colors.black)),
       body: Container(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -35,7 +64,7 @@ class _SMSMenuState extends State<SMSMenu> {
               ),
               10.height,
               Container(
-                padding: EdgeInsets.all(8),
+                padding: const EdgeInsets.all(8),
                 decoration: boxDecorationWithShadow(
                   borderRadius: BorderRadius.circular(10),
                   backgroundColor: context.cardColor,
@@ -44,7 +73,12 @@ class _SMSMenuState extends State<SMSMenu> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     CircleAvatar(
-                        backgroundImage: AssetImage("assets/logo/two.jpg"),
+                        backgroundImage: (userData.data != null &&
+                                userData.data!.image != null)
+                            ? NetworkImage(
+                                contants.urlLogin + userData.data!.image!)
+                            : const AssetImage("assets/logo/two.jpg")
+                                as ImageProvider,
                         radius: 40),
                     10.width,
                     Column(
@@ -52,12 +86,25 @@ class _SMSMenuState extends State<SMSMenu> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         5.height,
-                        Text("Chirag D", style: boldTextStyle(size: 18)),
+                        Text(
+                            userData.data != null
+                                ? userData.data!.firstName! +
+                                    " " +
+                                    userData.data!.lastName!
+                                : "",
+                            style: boldTextStyle(size: 18)),
                         5.height,
-                        Text("(132) 451-1548",
-                            style: primaryTextStyle(color: Colors.orange)),
+                        Text(userData.data != null ? userData.data!.email! : "",
+                            style: secondaryTextStyle(size: 16)),
                         5.height,
-                        Text("Gateway MD", style: secondaryTextStyle()),
+                        Text(
+                            userData.data != null
+                                ? userData.data!.company!.companyName! +
+                                    " \n" +
+                                    userData.data!.company!.contactPhone!
+                                : "",
+                            style:
+                                boldTextStyle(color: Colors.orange, size: 16)),
                       ],
                     ).expand()
                   ],
@@ -65,7 +112,7 @@ class _SMSMenuState extends State<SMSMenu> {
               ),
               16.height,
               Container(
-                padding: EdgeInsets.all(8),
+                padding: const EdgeInsets.all(8),
                 decoration: boxDecorationWithShadow(
                   borderRadius: BorderRadius.circular(10),
                   backgroundColor: context.cardColor,
@@ -73,7 +120,7 @@ class _SMSMenuState extends State<SMSMenu> {
                 child: Column(
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
+                      padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
                       child: Row(
                         children: <Widget>[
                           Row(
@@ -84,12 +131,13 @@ class _SMSMenuState extends State<SMSMenu> {
                               Text("Settings", style: primaryTextStyle()),
                             ],
                           ).expand(),
-                          Icon(Icons.keyboard_arrow_right, color: Colors.black),
+                          const Icon(Icons.keyboard_arrow_right,
+                              color: Colors.black),
                         ],
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
+                      padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
                       child: Row(
                         children: <Widget>[
                           Row(
@@ -103,12 +151,13 @@ class _SMSMenuState extends State<SMSMenu> {
                                   style: primaryTextStyle()),
                             ],
                           ).expand(),
-                          Icon(Icons.keyboard_arrow_right, color: Colors.black),
+                          const Icon(Icons.keyboard_arrow_right,
+                              color: Colors.black),
                         ],
                       ),
                     ).onTap(() {}),
                     Container(
-                      padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
+                      padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
                       child: Row(
                         children: <Widget>[
                           Row(
@@ -122,7 +171,8 @@ class _SMSMenuState extends State<SMSMenu> {
                                   style: primaryTextStyle()),
                             ],
                           ).expand(),
-                          Icon(Icons.keyboard_arrow_right, color: Colors.black),
+                          const Icon(Icons.keyboard_arrow_right,
+                              color: Colors.black),
                         ],
                       ),
                     ).onTap(() {
@@ -131,7 +181,7 @@ class _SMSMenuState extends State<SMSMenu> {
                           ? Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => NotifyScreen()))
+                                  builder: (context) => const NotifyScreen()))
                           : ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 backgroundColor: Colors.orange,
@@ -141,9 +191,10 @@ class _SMSMenuState extends State<SMSMenu> {
                                     Image(
                                         width: width * .1,
                                         height: height * .1,
-                                        image:
-                                            AssetImage("assets/logo/two.jpg")),
-                                    Text('Under Construction, Please Wait'),
+                                        image: const AssetImage(
+                                            "assets/logo/two.jpg")),
+                                    const Text(
+                                        'Under Construction, Please Wait'),
                                   ],
                                 ),
                                 action: SnackBarAction(
@@ -155,7 +206,7 @@ class _SMSMenuState extends State<SMSMenu> {
                             );
                     }),
                     Container(
-                      padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
+                      padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
                       child: Row(
                         children: <Widget>[
                           Row(
@@ -169,7 +220,8 @@ class _SMSMenuState extends State<SMSMenu> {
                                   style: primaryTextStyle()),
                             ],
                           ).expand(),
-                          Icon(Icons.keyboard_arrow_right, color: Colors.black),
+                          const Icon(Icons.keyboard_arrow_right,
+                              color: Colors.black),
                         ],
                       ),
                     ).onTap(() {
@@ -184,7 +236,7 @@ class _SMSMenuState extends State<SMSMenu> {
               ),
               16.height,
               Container(
-                padding: EdgeInsets.all(8),
+                padding: const EdgeInsets.all(8),
                 decoration: boxDecorationWithShadow(
                   borderRadius: BorderRadius.circular(10),
                   backgroundColor: context.cardColor,
@@ -192,7 +244,7 @@ class _SMSMenuState extends State<SMSMenu> {
                 child: Column(
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
+                      padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
                       child: Row(
                         children: <Widget>[
                           Row(
@@ -205,7 +257,8 @@ class _SMSMenuState extends State<SMSMenu> {
                               Text("Logout", style: primaryTextStyle()),
                             ],
                           ).expand(),
-                          Icon(Icons.keyboard_arrow_right, color: Colors.black),
+                          const Icon(Icons.keyboard_arrow_right,
+                              color: Colors.black),
                         ],
                       ),
                     ).onTap(
@@ -256,10 +309,8 @@ dialogContent(BuildContext context) {
       shape: BoxShape.rectangle,
       borderRadius: BorderRadius.circular(10),
       boxShadow: [
-        BoxShadow(
-            color: Colors.black26,
-            blurRadius: 10.0,
-            offset: const Offset(0.0, 10.0)),
+        const BoxShadow(
+            color: Colors.black26, blurRadius: 10.0, offset: Offset(0.0, 10.0)),
       ],
     ),
     child: Column(
@@ -269,7 +320,7 @@ dialogContent(BuildContext context) {
         Text("Confirm Log Out ?", style: primaryTextStyle(size: 18)).onTap(() {
           finish(context);
         }).paddingOnly(top: 8, bottom: 8),
-        Divider(height: 10, thickness: 1.0, color: Colors.grey),
+        const Divider(height: 10, thickness: 1.0, color: Colors.grey),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

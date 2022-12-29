@@ -124,6 +124,28 @@ class AuthService {
   //   }
   // }
 
+  Future<String> getAccessToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    // ignore: non_constant_identifier_names
+    bool CheckValue = prefs.containsKey('accessToken');
+    var accessToken = "";
+    if (CheckValue == true) {
+      accessToken = prefs.getString('accessToken')!;
+    }
+    return accessToken;
+  }
+
+  Future<String> getPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    // ignore: non_constant_identifier_names
+    bool CheckValue = prefs.containsKey('token');
+    var token = "";
+    if (CheckValue == true) {
+      token = prefs.getString('token')!;
+    }
+    return token;
+  }
+
   Future register(data) async {
     var res = await post(Uri.parse('${avdbaseUrl}gwmsignup'), body: data);
     return res;
