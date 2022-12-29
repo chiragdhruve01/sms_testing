@@ -46,11 +46,32 @@ class _ChatPageState extends State<ChatPage> {
 
   websocket() async {
     _channel.stream.listen((message) {
-      print("message" + message);
-      // var msg = jsonDecode(message);
-      // print("message" + jsonDecode(message));
-      // print("msg" + msg.toString());
-      // print("room" + msg['room']);
+      var msg = jsonDecode(message);
+      print("okay msg received" + msg.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.pink[200],
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          content: Row(
+            children: <Widget>[
+              const Image(
+                  width: 100,
+                  height: 100,
+                  image: AssetImage("assets/logo/two.jpg")),
+              SizedBox(width: 20),
+              Text(msg['message']),
+            ],
+          ),
+          action: SnackBarAction(
+            textColor: Colors.orange,
+            label: 'okay',
+            onPressed: () {},
+          ),
+        ),
+      );
       // ChatDetailPage(room: msg['room']);
       getEmployeeList();
     });
@@ -58,6 +79,7 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   void dispose() {
+    print("********** close connenction **********");
     _channel.sink.close();
     super.dispose();
   }
