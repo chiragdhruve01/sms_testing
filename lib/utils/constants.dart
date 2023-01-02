@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 // Colors
@@ -35,4 +36,5 @@ class Constants {
   static const String profile = '/user/getUserAppDetails/';
   static String updateProfile = '/user/AppEditUser';
   static var websocketconnection = false;
+  static var websocketController = BehaviorSubject<dynamic>();
 }

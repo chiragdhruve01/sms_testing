@@ -41,6 +41,15 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   @override
   void initState() {
+    Constants.websocketController.listen((latestEvent) {
+      print("latestEvent for chat detail dart" + latestEvent.toString());
+      print("web socket room " + latestEvent['room'].toString());
+      print("current room " + room.toString());
+      if (latestEvent['room'] == room) {
+        getRoomUserMessages(room);
+      }
+      // use latestEvent data here.
+    });
     getRoomUserMessages(room);
     super.initState();
     if (room.isNotEmpty) {

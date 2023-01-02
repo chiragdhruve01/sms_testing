@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 // import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
+import 'package:rxdart/rxdart.dart';
 import 'package:sms/services/auth_service.dart';
 import 'package:sms/utils/constants.dart';
 import 'package:intl/intl.dart';
@@ -36,6 +37,9 @@ class _ChatPageState extends State<ChatPage> {
     // countuser = getEmployeeList();
     getEmployeeList();
     websocket();
+    // Constants.websocketController.listen((latestEvent) {
+    // use latestEvent data here.
+    // });
     // getDeviceToken();
   }
 
@@ -50,6 +54,7 @@ class _ChatPageState extends State<ChatPage> {
       Constants.websocket = _channel;
       _channel.stream.listen((message) {
         var msg = jsonDecode(message);
+        Constants.websocketController.add(msg);
         print("okay msg received" + msg.toString());
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
