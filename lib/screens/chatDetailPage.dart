@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sms/utils/constants.dart' as contants;
 import '../services/auth_service.dart';
+import '../utils/constants.dart';
 
 class ChatDetailPage extends StatefulWidget {
   const ChatDetailPage({Key? key, required this.room}) : super(key: key);
@@ -24,7 +25,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   final ScrollController scroll = ScrollController();
   bool showbtn = false;
   AuthService authservice = AuthService();
-
+  final msgcontroller = TextEditingController();
   // late Map<String, dynamic> answer;
   _scrollToEnd() {
     setState(() {
@@ -113,6 +114,26 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     } catch (e) {
       return Future.error(e);
     }
+  }
+
+  Future<void> sendWebSocketMessage(String message) async {
+    String token = await authservice.getPrefs();
+    print("message" + message.toString());
+    Constants.websocket!.sink.add(
+      jsonEncode({
+        'type': 'chat_message',
+        'userid': token,
+        'image': '',
+        'imageName': '',
+        'message': message,
+        'phone': messages![0]['contact']['formatcontact'],
+        'contacts': '',
+        'room': room,
+      }),
+    );
+    getRoomUserMessages(room);
+
+    setState(() {});
   }
 
   _ChatDetailPageState({required this.room});
@@ -210,28 +231,69 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         ),
       ),
       // floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-      floatingActionButton: Container(
-        alignment: Alignment.bottomLeft,
-        padding: const EdgeInsets.only(bottom: 60.0, left: 15),
-        child: AnimatedOpacity(
-          duration: const Duration(milliseconds: 1000), //show/hide animation
-          opacity: showbtn ? 0.2 : 0.0, //set obacity to 1 on visible, or hide
-          child: FloatingActionButton(
-            heroTag: null,
-            mini: true,
-            tooltip: 'Scroll to top',
-            onPressed: () {
-              scroll.animateTo(0,
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Container(
+                alignment: Alignment.bottomLeft,
+                padding: const EdgeInsets.only(bottom: 60.0, left: 15),
+                child: AnimatedOpacity(
                   duration:
-                      const Duration(milliseconds: 500), //duration of scroll
-                  curve: Curves.fastOutSlowIn //scroll type
-                  );
-            },
-            child: const Icon(Icons.arrow_upward),
-            // backgroundColor: Colors.blue.shade100,
+                      const Duration(milliseconds: 1000), //show/hide animation
+                  opacity: showbtn
+                      ? 0.2
+                      : 0.0, //set obacity to 1 on visible, or hide
+                  child: FloatingActionButton(
+                    heroTag: null,
+                    mini: true,
+                    tooltip: 'Scroll to top',
+                    onPressed: () {
+                      scroll.animateTo(0,
+                          duration: const Duration(
+                              milliseconds: 500), //duration of scroll
+                          curve: Curves.fastOutSlowIn //scroll type
+                          );
+                    },
+                    child: const Icon(Icons.arrow_upward),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Container(
+                alignment: Alignment.bottomRight,
+                padding: const EdgeInsets.only(bottom: 60.0, left: 300),
+                child: AnimatedOpacity(
+                  duration:
+                      const Duration(milliseconds: 1000), //show/hide animation
+                  opacity: showbtn
+                      ? 0.2
+                      : 0.0, //set obacity to 1 on visible, or hide
+                  child: FloatingActionButton(
+                    heroTag: null,
+                    mini: true,
+                    tooltip: 'Scroll to bottom',
+                    onPressed: () {
+                      _scrollToEnd();
+                    },
+                    child: const Icon(Icons.arrow_drop_down),
+                    // backgroundColor: Colors.blue.shade100,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
+
       body: Stack(
         children: <Widget>[
           Column(
@@ -453,8 +515,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                       const SizedBox(
                         width: 15,
                       ),
-                      const Expanded(
+                      Expanded(
                         child: TextField(
+                          controller: msgcontroller,
                           decoration: InputDecoration(
                               hintText: "Write message...",
                               hintStyle: TextStyle(color: Colors.black54),
@@ -465,7 +528,16 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                         width: 15,
                       ),
                       FloatingActionButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          if (msgcontroller.text.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text('Message is Required'),
+                                backgroundColor: Colors.orange));
+                            return;
+                          }
+                          sendWebSocketMessage(msgcontroller.text);
+                          msgcontroller.clear();
+                        },
                         backgroundColor: Colors.blue,
                         elevation: 0,
                         child: const Icon(

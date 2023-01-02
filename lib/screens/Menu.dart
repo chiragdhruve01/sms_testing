@@ -9,6 +9,7 @@ import 'package:sms/screens/welcome_screen.dart';
 import 'package:sms/utils/constants.dart' as contants;
 import '../models/chat.dart';
 import '../services/auth_service.dart';
+import '../utils/constants.dart';
 
 class SMSMenu extends StatefulWidget {
   static var tag = "/SMSMenu";
@@ -301,6 +302,10 @@ dialogContent(BuildContext context) {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
     await prefs.remove('accessToken');
+    if (Constants.websocket != null) {
+      Constants.websocket!.sink.close();
+    }
+    Constants.websocketconnection = false;
   }
 
   return Container(

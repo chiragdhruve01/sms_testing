@@ -45,36 +45,40 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   websocket() async {
-    _channel.stream.listen((message) {
-      var msg = jsonDecode(message);
-      print("okay msg received" + msg.toString());
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.pink[200],
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
+    if (Constants.websocketconnection == false) {
+      print("Web Socket Connected");
+      Constants.websocket = _channel;
+      _channel.stream.listen((message) {
+        var msg = jsonDecode(message);
+        print("okay msg received" + msg.toString());
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.pink[200],
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24),
+            ),
+            content: Row(
+              children: <Widget>[
+                const Image(
+                    width: 100,
+                    height: 100,
+                    image: AssetImage("assets/logo/two.jpg")),
+                SizedBox(width: 20),
+                Text(msg['message']),
+              ],
+            ),
+            action: SnackBarAction(
+              textColor: Colors.orange,
+              label: 'okay',
+              onPressed: () {},
+            ),
           ),
-          content: Row(
-            children: <Widget>[
-              const Image(
-                  width: 100,
-                  height: 100,
-                  image: AssetImage("assets/logo/two.jpg")),
-              SizedBox(width: 20),
-              Text(msg['message']),
-            ],
-          ),
-          action: SnackBarAction(
-            textColor: Colors.orange,
-            label: 'okay',
-            onPressed: () {},
-          ),
-        ),
-      );
-      // ChatDetailPage(room: msg['room']);
-      getEmployeeList();
-    });
+        );
+        getEmployeeList();
+      });
+      Constants.websocketconnection = true;
+    }
   }
 
   @override
