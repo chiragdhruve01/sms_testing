@@ -111,8 +111,8 @@ class _ChatPageState extends State<ChatPage> {
               ),
             ),
           );
-          getEmployeeList();
         }
+        getEmployeeList();
       });
       Constants.websocketconnection = true;
     }
@@ -147,7 +147,6 @@ class _ChatPageState extends State<ChatPage> {
     filterUsers = [...chatData.countuser!];
     setState(() {
       chatUsers;
-      filterUsers;
     });
   }
 
