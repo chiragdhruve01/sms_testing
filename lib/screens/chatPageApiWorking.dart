@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, prefer_interpolation_to_compose_strings, avoid_print
+
 import 'dart:io';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -17,6 +19,8 @@ import '../widgets/conversationListAPI.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ChatPage extends StatefulWidget {
+  const ChatPage({super.key});
+
   @override
   _ChatPageState createState() => _ChatPageState();
 }
@@ -24,12 +28,16 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   late Future<List<Countuser>> countuser;
   List<Countuser>? chatUsers = [];
+  List<Countuser>? filterUsers = [];
   dynamic newtoken = "";
   dynamic user;
   static UserDetails userDetails = UserDetails();
   final _channel = WebSocketChannel.connect(
+    // ignore: prefer_interpolation_to_compose_strings
     Uri.parse(wsprotocol + '://' + wsdomain + wsurlchat + "3/1/"),
   );
+  TextEditingController searchcontroller = TextEditingController();
+
   final AuthService authService = AuthService();
   @override
   void initState() {
@@ -41,6 +49,27 @@ class _ChatPageState extends State<ChatPage> {
     // use latestEvent data here.
     // });
     // getDeviceToken();
+  }
+
+  onSearchTextChanged(String text) async {
+    chatUsers!.clear();
+    if (text.isEmpty) {
+      chatUsers = [...filterUsers!];
+      setState(() {});
+      return;
+    }
+    for (var userDetail in filterUsers!) {
+      if ((userDetail.firstName != null &&
+              userDetail.firstName!
+                  .toLowerCase()
+                  .contains(text.toLowerCase())) ||
+          (userDetail.lastName != null &&
+              userDetail.lastName!.contains(text)) ||
+          (userDetail.contact != null && userDetail.contact!.contains(text))) {
+        chatUsers!.add(userDetail);
+      }
+    }
+    setState(() {});
   }
 
   getDeviceToken() async {
@@ -71,7 +100,7 @@ class _ChatPageState extends State<ChatPage> {
                       width: 100,
                       height: 100,
                       image: AssetImage("assets/logo/two.jpg")),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   Text(msg['message']),
                 ],
               ),
@@ -104,8 +133,10 @@ class _ChatPageState extends State<ChatPage> {
     user = await authService.getUserDetails(token);
     userDetails = UserDetails.fromJson(user);
     if (userDetails.data!.userType == 'superadmin') {
+      // ignore: unnecessary_brace_in_string_interps
       url = Uri.http(urlLogindomain, '${superAdminMsg}${token}');
     } else {
+      // ignore: unnecessary_brace_in_string_interps
       url = Uri.http(urlLogindomain, '${usergetmsg}${token}');
     }
     final response =
@@ -113,9 +144,10 @@ class _ChatPageState extends State<ChatPage> {
     final jsonData = jsonDecode(response.body);
     final chatData = Chat.fromJson(jsonData);
     chatUsers = chatData.countuser!;
-    print('DATA ==== ' + chatUsers!.length.toString());
+    filterUsers = [...chatData.countuser!];
     setState(() {
       chatUsers;
+      filterUsers;
     });
   }
 
@@ -125,7 +157,7 @@ class _ChatPageState extends State<ChatPage> {
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -143,7 +175,7 @@ class _ChatPageState extends State<ChatPage> {
             // ),
             SafeArea(
               child: Padding(
-                padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+                padding: const EdgeInsets.only(left: 16, right: 16, top: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -173,12 +205,12 @@ class _ChatPageState extends State<ChatPage> {
                       ),
                       child: Row(
                         children: <Widget>[
-                          Icon(
+                          const Icon(
                             Icons.add,
                             color: Colors.pink,
                             size: 20,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 2,
                           ),
                           InkWell(
@@ -199,9 +231,10 @@ class _ChatPageState extends State<ChatPage> {
                                           Image(
                                               width: width * .1,
                                               height: height * .1,
-                                              image: AssetImage(
+                                              image: const AssetImage(
                                                   "assets/logo/two.jpg")),
-                                          Text('toast' + ". " + 'message'),
+                                          const Text(
+                                              'toast' + ". " + 'message'),
                                         ],
                                       ),
                                       action: SnackBarAction(
@@ -216,7 +249,7 @@ class _ChatPageState extends State<ChatPage> {
                             //     MaterialPageRoute(
                             //         builder: (context) => SMSMenu()));
 
-                            child: Text(
+                            child: const Text(
                               "Add New",
                               style: TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.bold),
@@ -231,9 +264,10 @@ class _ChatPageState extends State<ChatPage> {
             ),
             SafeArea(
               child: Padding(
-                padding: EdgeInsets.all(2),
+                padding: const EdgeInsets.all(2),
                 // padding: EdgeInsets.only(top: 16, left: 16, right: 16),
                 child: TextField(
+                  controller: searchcontroller,
                   decoration: InputDecoration(
                     hintText: "Search...",
                     hintStyle: TextStyle(color: Colors.grey.shade600),
@@ -244,11 +278,12 @@ class _ChatPageState extends State<ChatPage> {
                     ),
                     filled: true,
                     fillColor: Colors.grey.shade100,
-                    contentPadding: EdgeInsets.all(8),
+                    contentPadding: const EdgeInsets.all(8),
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                         borderSide: BorderSide(color: Colors.grey.shade100)),
                   ),
+                  onChanged: onSearchTextChanged,
                 ),
               ),
             ),
@@ -280,8 +315,8 @@ class _ChatPageState extends State<ChatPage> {
             ListView.builder(
               itemCount: chatUsers!.length,
               shrinkWrap: true,
-              padding: EdgeInsets.only(top: 16),
-              physics: NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.only(top: 16),
+              physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 // return ListTile(
                 //     title: Text(
