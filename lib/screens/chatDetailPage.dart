@@ -22,7 +22,9 @@ class ChatDetailPage extends StatefulWidget {
 
 class _ChatDetailPageState extends State<ChatDetailPage> {
   List<dynamic>? messages = [];
-  final ScrollController scroll = ScrollController();
+  var timer;
+  final ScrollController scroll =
+      ScrollController(initialScrollOffset: 500 * 100.0);
   bool showbtn = false;
   AuthService authservice = AuthService();
   final msgcontroller = TextEditingController();
@@ -41,15 +43,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   @override
   void initState() {
-    Constants.websocketController.listen((latestEvent) {
-      print("latestEvent for chat detail dart" + latestEvent.toString());
-      print("web socket room " + latestEvent['room'].toString());
-      print("current room " + room.toString());
-      if (latestEvent['room'] == room) {
-        getRoomUserMessages(room);
-      }
-      // use latestEvent data here.
-    });
     getRoomUserMessages(room);
     super.initState();
     if (room.isNotEmpty) {
@@ -66,6 +59,16 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         backgroundColor: Colors.deepOrange,
       ));
     }
+    Constants.websocketController.listen((latestEvent) {
+      print("latestEvent for chat detail dart" + latestEvent.toString());
+      print("web socket room " + latestEvent['room'].toString());
+      print("current room " + room.toString());
+      print("Constants.roomid in listener " + Constants.roomid.toString());
+      if (latestEvent['room'] == Constants.roomid) {
+        getRoomUserMessages(room);
+      }
+      // use latestEvent data here.
+    });
     scroll.addListener(() {
       double showoffset = 10.0;
       if (scroll.offset > showoffset) {
@@ -78,8 +81,17 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     });
   }
 
+  @override
+  void dispose() {
+    print("********** close connenction **********");
+    timer.cancel();
+    timer; //clear the timer variable
+    super.dispose();
+  }
+
   Future<void> getRoomUserMessages(room) async {
     try {
+      // Constants.roomid = room;
       String accessToken = await authservice.getAccessToken();
       // ignore: unnecessary_brace_in_string_interps
       final url = Uri.http(
@@ -89,35 +101,40 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       var data = jsonDecode(response.body);
       // answer = jsonDecode(response.body);
       messages = data['chats'];
-      setState(() {
-        messages = data['chats'];
-      });
+      if (mounted) {
+        setState(() {
+          messages = data['chats'];
+        });
+      }
 
       // Future.delayed(Duration.zero, () {
       //   setState(() {
-      //     scroll.animateTo(
-      //       scroll.position.maxScrollExtent,
-      //       duration: const Duration(
-      //         milliseconds: 300,
-      //       ),
-      //       curve: Curves.easeOut,
-      //     );
+      //     if (scroll.hasClients) {
+      //       scroll.animateTo(
+      //         scroll.position.maxScrollExtent,
+      //         duration: const Duration(
+      //           milliseconds: 300,
+      //         ),
+      //         curve: Curves.easeOut,
+      //       );
+      //     }
       //   });
       // });
 
-      Timer(
+      timer = Timer(
           const Duration(
             seconds: 1,
-          ),
-          () => setState(() {
-                scroll.animateTo(
-                  scroll.position.maxScrollExtent + 200,
-                  duration: const Duration(
-                    milliseconds: 300,
-                  ),
-                  curve: Curves.easeOut,
-                );
-              }));
+          ), () {
+        if (scroll.hasClients) {
+          scroll.animateTo(
+            scroll.position.maxScrollExtent + 200,
+            duration: const Duration(
+              milliseconds: 300,
+            ),
+            curve: Curves.easeOut,
+          );
+        }
+      });
 
       // return data['chats'];
     } catch (e) {
@@ -165,7 +182,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     //   context,
                     //   MaterialPageRoute(builder: (context) => ChatPage()),
                     // );
-                    Navigator.pop(context);
+                    Navigator.of(context, rootNavigator: true).pop();
                   },
                   icon: const Icon(
                     Icons.arrow_back,
@@ -243,62 +260,49 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              Container(
-                alignment: Alignment.bottomLeft,
-                padding: const EdgeInsets.only(bottom: 60.0, left: 15),
-                child: AnimatedOpacity(
-                  duration:
-                      const Duration(milliseconds: 1000), //show/hide animation
-                  opacity: showbtn
-                      ? 0.2
-                      : 0.0, //set obacity to 1 on visible, or hide
-                  child: FloatingActionButton(
-                    heroTag: null,
-                    mini: true,
-                    tooltip: 'Scroll to top',
-                    onPressed: () {
-                      scroll.animateTo(0,
-                          duration: const Duration(
-                              milliseconds: 500), //duration of scroll
-                          curve: Curves.fastOutSlowIn //scroll type
-                          );
-                    },
-                    child: const Icon(Icons.arrow_upward),
-                  ),
-                ),
+          Container(
+            alignment: Alignment.bottomLeft,
+            padding: const EdgeInsets.only(bottom: 60.0, left: 15),
+            child: AnimatedOpacity(
+              duration:
+                  const Duration(milliseconds: 1000), //show/hide animation
+              opacity:
+                  showbtn ? 0.2 : 0.0, //set obacity to 1 on visible, or hide
+              child: FloatingActionButton(
+                heroTag: null,
+                mini: true,
+                tooltip: 'Scroll to top',
+                onPressed: () {
+                  scroll.animateTo(0,
+                      duration: const Duration(
+                          milliseconds: 500), //duration of scroll
+                      curve: Curves.fastOutSlowIn //scroll type
+                      );
+                },
+                child: const Icon(Icons.arrow_upward),
               ),
-            ],
+            ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              Container(
-                alignment: Alignment.bottomRight,
-                padding: const EdgeInsets.only(bottom: 60.0, left: 300),
-                child: AnimatedOpacity(
-                  duration:
-                      const Duration(milliseconds: 1000), //show/hide animation
-                  opacity: showbtn
-                      ? 0.2
-                      : 0.0, //set obacity to 1 on visible, or hide
-                  child: FloatingActionButton(
-                    heroTag: null,
-                    mini: true,
-                    tooltip: 'Scroll to bottom',
-                    onPressed: () {
-                      _scrollToEnd();
-                    },
-                    child: const Icon(Icons.arrow_drop_down),
-                    // backgroundColor: Colors.blue.shade100,
-                  ),
-                ),
+          Spacer(),
+          Container(
+            alignment: Alignment.bottomRight,
+            padding: const EdgeInsets.only(bottom: 60.0),
+            child: AnimatedOpacity(
+              duration:
+                  const Duration(milliseconds: 1000), //show/hide animation
+              opacity:
+                  showbtn ? 0.2 : 0.0, //set obacity to 1 on visible, or hide
+              child: FloatingActionButton(
+                heroTag: null,
+                mini: true,
+                tooltip: 'Scroll to bottom',
+                onPressed: () {
+                  _scrollToEnd();
+                },
+                child: const Icon(Icons.arrow_drop_down),
+                // backgroundColor: Colors.blue.shade100,
               ),
-            ],
+            ),
           ),
         ],
       ),

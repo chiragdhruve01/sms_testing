@@ -341,7 +341,7 @@ dialogContent(BuildContext context) {
                 .onTap(
               () {
                 removePrefs();
-                Navigator.push(context,
+                Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => LoginScreen()));
               },
             ).paddingLeft(16)

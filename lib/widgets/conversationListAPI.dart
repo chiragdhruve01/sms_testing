@@ -41,6 +41,9 @@ class _ConversationAPIList extends State<ConversationAPIList> {
         // print("value" + context);
         print(widget.room);
         print(widget.contact);
+        Constants.roomid = widget.room!;
+        print('Constants.roomid' + Constants.roomid.toString());
+
         Navigator.of(context)
             .push(
           MaterialPageRoute(
@@ -48,8 +51,8 @@ class _ConversationAPIList extends State<ConversationAPIList> {
           ),
         )
             .then((_) {
+          Constants.roomid = "";
           print("back called so refresh again");
-          ChatDetailPage(room: widget.room!);
         });
         // Navigator.push(context, MaterialPageRoute(builder: (context) {
         //   return ChatDetailPage(room: widget.room!);
